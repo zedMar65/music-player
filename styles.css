@@ -14,8 +14,20 @@
     border-bottom: 1px solid black;
 }
 
+.drag-note {
+    background-color: rgba(85, 227, 237);
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+}
+
 .note {
     background-color: rgb(85, 227, 237);
     position: absolute;
     height: 100%;
+    z-index: 1;
+}
+
+.shadow-note {
+    background-color: rgba(85, 227, 237, 0.5);
 }
