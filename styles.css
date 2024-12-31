@@ -1,17 +1,55 @@
-.display-window {
-    background-color: gainsboro;
-    position: relative;
-    width: 1600px;
-    height: 800px;
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    
+html,
+body {
+    height: 100%;
 }
 
-.line {
+body {
+    margin: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+.header h1 {
+    font-size: 35px;
+    font-weight: 400;
+    padding: 16px 32px;
+}
+
+.scroll {
+    overflow-x: scroll;
+    margin: 0 32px;
+}
+
+.display {
+    height: 100%;
+    width: 1300px;
     position: relative;
-    border-bottom: 1px solid black;
+    display: grid;
+    grid-template-rows: repeat(14, 1fr);
+    background-color: #f5f5f5;
+    overflow: hidden;
+}
+
+.display>.line {
+    position: relative;
+    border-top: 1px solid #74bce3;
+}
+
+.vertical-lines {
+    box-sizing: border-box;
+    position: absolute;
+    display: flex;
+    gap: 99px;
+    height: 100%;
+    width: 100%;
+    border-bottom: 1px solid #74bce3;
+}
+
+.vertical-lines .line {
+    position: relative;
+    border-left: 1px solid #74bce3;
+    height: 100%;
+    width: 1px;
 }
 
 .drag-note {
@@ -22,10 +60,14 @@
 }
 
 .note {
-    background-color: rgb(85, 227, 237);
     position: absolute;
+    background-color: #55e3ed;
     height: 100%;
     z-index: 1;
+}
+
+.controls {
+    height: 100px;
 }
 
 .shadow-note {
