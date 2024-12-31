@@ -9,7 +9,7 @@ let notes = [
     {start: 7, dur: 2, freq: 1},
 ]
 
-const displayWindow = document.querySelector(".display-window");
+const displayWindow = document.querySelector(".display");
 const draggedNote = document.querySelector(".drag-note");
 let lines = [];
 
@@ -32,10 +32,6 @@ let shadowNote = document.createElement("div");
 shadowNote.classList.add("note");
 shadowNote.classList.add("shadow-note");
 shadowNote.style.display = "none";
-
-const displayRect = displayWindow.getBoundingClientRect();
-const displayX = displayRect.left;
-const displayY = displayRect.top;
 
 function displayNotes(noteList) {
     noteList.forEach(note => {
@@ -64,6 +60,10 @@ function mouseDown(event) {
 
     let mouseX = event.clientX;
     let mouseY = event.clientY;
+
+    const displayRect = displayWindow.getBoundingClientRect();
+    const displayX = displayRect.left;
+    const displayY = displayRect.top;
 
     const note = event.target;
     const noteRect = note.getBoundingClientRect();
@@ -96,19 +96,23 @@ function mouseUp(event) {
         let mouseX = event.clientX;
         let mouseY = event.clientY;
 
+        const displayRect = displayWindow.getBoundingClientRect();
+        const displayX = displayRect.left;
+        const displayY = displayRect.top;
+
         const currentLine = Math.floor((mouseY - displayWindow.getBoundingClientRect().top) / lineHeight);
         if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
-            return;
+            // crazy
+        } else {
+            const note = document.createElement("div");
+            note.classList.add("note");
+            const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - shadowNote.clientWidth);
+            note.style.left = `${leftValue}px`;
+            note.style.width = `${draggedNote.clientWidth}px`;
+
+            note.addEventListener("mousedown", mouseDown);
+            lines[currentLine].appendChild(note);
         }
-
-        const note = document.createElement("div");
-        note.classList.add("note");
-        const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - shadowNote.clientWidth);
-        note.style.left = `${leftValue}px`;
-        note.style.width = `${draggedNote.clientWidth}px`;
-
-        note.addEventListener("mousedown", mouseDown);
-        lines[currentLine].appendChild(note);
     }
 
     draggedNote.style.display = "none";
@@ -120,6 +124,10 @@ function mouseUp(event) {
 function dragNote(mouseX, mouseY) {
     draggedNote.style.left = `${mouseX+offsetX}px`;
     draggedNote.style.top = `${mouseY+offsetY}px`;
+
+    const displayRect = displayWindow.getBoundingClientRect();
+    const displayX = displayRect.left;
+    const displayY = displayRect.top;
 
     const currentLine = Math.floor((mouseY - displayWindow.getBoundingClientRect().top) / lineHeight);
     if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
