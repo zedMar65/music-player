@@ -16,13 +16,13 @@ body {
 }
 
 .scroll {
-    overflow-x: scroll;
+    overflow-x: auto;
     margin: 0 32px;
 }
 
 .display {
     height: 100%;
-    width: 1300px;
+    width: 2100px;
     position: relative;
     display: grid;
     grid-template-rows: repeat(14, 1fr);
@@ -53,7 +53,7 @@ body {
 }
 
 .drag-note {
-    background-color: rgba(85, 227, 237);
+    background-color: #55e3ed;
     position: absolute;
     z-index: 2;
     pointer-events: none;
@@ -71,5 +71,5 @@ body {
 }
 
 .shadow-note {
-    background-color: rgba(85, 227, 237, 0.5);
+    background-color: #55e3ed80;
 }
