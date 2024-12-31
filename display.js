@@ -24,10 +24,6 @@ for (let i = 0; i < lineCount; i++) {
     lines.push(line);
 }
 
-const lineHeight = displayWindow.clientHeight / lineCount;
-
-const windowWidth = displayWindow.clientWidth;
-
 let shadowNote = document.createElement("div");
 shadowNote.classList.add("note");
 shadowNote.classList.add("shadow-note");
@@ -100,6 +96,9 @@ function mouseUp(event) {
         const displayX = displayRect.left;
         const displayY = displayRect.top;
 
+        const lineHeight = displayWindow.clientHeight / lineCount;
+        const windowWidth = displayWindow.clientWidth;
+
         const currentLine = Math.floor((mouseY - displayWindow.getBoundingClientRect().top) / lineHeight);
         if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
             // crazy
@@ -128,6 +127,9 @@ function dragNote(mouseX, mouseY) {
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
     const displayY = displayRect.top;
+
+    const lineHeight = displayWindow.clientHeight / lineCount;
+    const windowWidth = displayWindow.clientWidth;
 
     const currentLine = Math.floor((mouseY - displayWindow.getBoundingClientRect().top) / lineHeight);
     if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
