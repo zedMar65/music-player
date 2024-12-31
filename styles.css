@@ -52,12 +52,24 @@ body {
     width: 1px;
 }
 
+.drag-note {
+    background-color: rgba(85, 227, 237);
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+}
+
 .note {
     position: absolute;
     background-color: #55e3ed;
     height: 100%;
+    z-index: 1;
 }
 
 .controls {
     height: 100px;
+}
+
+.shadow-note {
+    background-color: rgba(85, 227, 237, 0.5);
 }
