@@ -1,12 +1,12 @@
 let notes = [
-    {start: 0, dur: 2, freq: 8},
-    {start: 1, dur: 2, freq: 7},
-    {start: 2, dur: 2, freq: 6},
-    {start: 3, dur: 2, freq: 5},
-    {start: 4, dur: 2, freq: 4},
-    {start: 5, dur: 2, freq: 3},
-    {start: 6, dur: 2, freq: 2},
-    {start: 7, dur: 2, freq: 1},
+    { start: 0, dur: 2, freq: 8 },
+    { start: 1, dur: 2, freq: 7 },
+    { start: 2, dur: 2, freq: 6 },
+    { start: 3, dur: 2, freq: 5 },
+    { start: 4, dur: 2, freq: 4 },
+    { start: 5, dur: 2, freq: 3 },
+    { start: 6, dur: 2, freq: 2 },
+    { start: 7, dur: 2, freq: 1 },
 ]
 
 const displayWindow = document.querySelector(".display");
@@ -40,6 +40,7 @@ function displayNote(note) {
     noteElement.classList.add("note");
     noteElement.style.left = `${note.start * 100}px`;
     noteElement.style.width = `${note.dur * 100}px`;
+    noteElement.setAttribute("data-freq", note.freq);
 
     noteElement.addEventListener("mousedown", mouseDown);
 
@@ -108,6 +109,7 @@ function mouseUp(event) {
             const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - shadowNote.clientWidth);
             note.style.left = `${leftValue}px`;
             note.style.width = `${draggedNote.clientWidth}px`;
+            note.setAttribute("data-freq", currentLine + 1);
 
             note.addEventListener("mousedown", mouseDown);
             lines[currentLine].appendChild(note);
@@ -121,8 +123,8 @@ function mouseUp(event) {
 }
 
 function dragNote(mouseX, mouseY) {
-    draggedNote.style.left = `${mouseX+offsetX}px`;
-    draggedNote.style.top = `${mouseY+offsetY}px`;
+    draggedNote.style.left = `${mouseX + offsetX}px`;
+    draggedNote.style.top = `${mouseY + offsetY}px`;
 
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
