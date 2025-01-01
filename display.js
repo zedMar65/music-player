@@ -9,6 +9,10 @@ let notes = [
     {start: 700, dur: 200, freq: 1},
 ]
 
+let mouseX = 0;
+let mouseY = 0;
+
+const scrollContainer = document.querySelector(".scroll");
 const displayWindow = document.querySelector(".display");
 const draggedNote = document.querySelector(".drag-note");
 let lines = [];
@@ -57,11 +61,21 @@ function displayNote(note) {
 
 const minNoteWidth = 30;
 
-let offsetX = 0; // used for dragging
-let offsetY = 0; // used for dragging
+// Dragging
+let rawOffsetX = 0;
+let rawOffsetY = 0;
 
-let resizeOffset = 0; // used for resizing
-let rightAnchor = 0; // used for resizing
+let offsetX = 0;
+let offsetY = 0;
+
+// Resizing
+let rawResizeRightOffset = 0;
+let rawResizeLeftOffset = 0;
+let rawRightAnchor = 0;
+
+let resizeRightOffset = 0;
+let resizeLeftOffset = 0;
+let rightAnchor = 0;
 
 let dragging = false;
 let resizingLeft = false;
@@ -69,24 +83,44 @@ let resizingRight = false;
 
 let resizedNote = null;
 
-function startDragging(note, mouseX, mouseY) {
+function recalculateOffsets() { // Fixes the offsets when the window position changes
+    const displayRect = displayWindow.getBoundingClientRect();
+    const displayX = displayRect.left;
+    const displayY = displayRect.top;
+
+    offsetX = rawOffsetX - displayX;
+    offsetY = rawOffsetY - displayY;
+
+    resizeRightOffset = rawResizeRightOffset - displayX;
+    resizeLeftOffset = rawResizeLeftOffset - displayX;
+
+    rightAnchor = rawRightAnchor;
+
+    callMoveFunctions();
+}
+
+scrollContainer.addEventListener("scroll", recalculateOffsets);
+
+function startDragging(note) {
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
     const displayY = displayRect.top;
 
     const noteRect = note.getBoundingClientRect();
-    const noteX = noteRect.left - displayX;
-    const noteY = noteRect.top - displayY;
+    const noteX = noteRect.left;
+    const noteY = noteRect.top;
     const noteWidth = noteRect.width;
     const noteHeight = noteRect.height;
 
-    offsetX = noteX - mouseX;
-    offsetY = noteY - mouseY;
+    rawOffsetX = noteX - mouseX;
+    rawOffsetY = noteY - mouseY;
+
+    recalculateOffsets();
 
     draggedNote.style.width = `${noteWidth}px`;
     draggedNote.style.height = `${noteHeight}px`;
 
-    dragNote(mouseX, mouseY);
+    dragNote();
 
     draggedNote.style.display = "block";
     shadowNote.style.width = `${noteWidth}px`;
@@ -97,30 +131,33 @@ function startDragging(note, mouseX, mouseY) {
     dragging = true;
 }
 
-function startResizingLeft(note, mouseX, mouseY) {
+function startResizingLeft(note) {
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
 
     const noteRect = note.getBoundingClientRect();
-    const noteX = noteRect.left - displayX;
+    const noteX = noteRect.left;
     const noteWidth = noteRect.width;
 
-    resizeOffset = mouseX - noteX;
-    rightAnchor = noteX + noteWidth;
+    rawResizeLeftOffset = noteX - mouseX;
+    rawRightAnchor = noteX + noteWidth - displayX;
+
+    recalculateOffsets();
 
     resizedNote = note;
     resizingLeft = true;
 }
 
-function startResizingRight(note, mouseX, mouseY) {
+function startResizingRight(note) {
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
 
     const noteRect = note.getBoundingClientRect();
-    const noteX = noteRect.left - displayX;
     const noteWidth = noteRect.width;
 
-    resizeOffset = noteWidth - mouseX;
+    rawResizeRightOffset = noteWidth - mouseX + displayX;
+
+    recalculateOffsets();
 
     resizedNote = note;
     resizingRight = true;
@@ -129,29 +166,23 @@ function startResizingRight(note, mouseX, mouseY) {
 function mouseDown(event) {
     event.preventDefault();
 
-    let mouseX = event.clientX;
-    let mouseY = event.clientY;
-
     const target = event.target;
 
     if (target.classList.contains("note")) {
-        startDragging(target, mouseX, mouseY);
+        startDragging(target);
     }
 
     if (target.classList.contains("resize-left")) {
-        startResizingLeft(target.parentElement, mouseX, mouseY);
+        startResizingLeft(target.parentElement);
     }
 
     if (target.classList.contains("resize-right")) {
-        startResizingRight(target.parentElement, mouseX, mouseY);
+        startResizingRight(target.parentElement);
     }
 }
 
-function stopDragging(event) {
+function stopDragging() {
     if (dragging) {
-        let mouseX = event.clientX;
-        let mouseY = event.clientY;
-
         const displayRect = displayWindow.getBoundingClientRect();
         const displayX = displayRect.left;
         const displayY = displayRect.top;
@@ -159,7 +190,7 @@ function stopDragging(event) {
         const lineHeight = displayWindow.clientHeight / lineCount;
         const windowWidth = displayWindow.clientWidth;
 
-        const currentLine = Math.floor((mouseY - displayWindow.getBoundingClientRect().top) / lineHeight);
+        const currentLine = Math.floor((mouseY - displayY) / lineHeight);
         if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
             // crazy
         } else {
@@ -187,12 +218,12 @@ function stopResizingRight() {
 function mouseUp(event) {
     event.preventDefault();
 
-    stopDragging(event);
+    stopDragging();
     stopResizingLeft();
     stopResizingRight();
 }
 
-function dragNote(mouseX, mouseY) {
+function dragNote() {
     draggedNote.style.left = `${mouseX+offsetX}px`;
     draggedNote.style.top = `${mouseY+offsetY}px`;
 
@@ -203,7 +234,7 @@ function dragNote(mouseX, mouseY) {
     const lineHeight = displayWindow.clientHeight / lineCount;
     const windowWidth = displayWindow.clientWidth;
 
-    const currentLine = Math.floor((mouseY - displayWindow.getBoundingClientRect().top) / lineHeight);
+    const currentLine = Math.floor((mouseY - displayY) / lineHeight);
     if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
         shadowNote.style.display = "none";
         return;
@@ -214,43 +245,47 @@ function dragNote(mouseX, mouseY) {
     shadowNote.style.left = `${leftValue}px`;
 }
 
-function resizeLeft(mouseX, mouseY) {
+function resizeLeft() {
     const maxNoteWidth = rightAnchor;
 
-    const width = Math.max(minNoteWidth, Math.min(maxNoteWidth, rightAnchor - mouseX + resizeOffset));
+    const width = Math.max(minNoteWidth, Math.min(maxNoteWidth, rightAnchor - mouseX - resizeLeftOffset));
 
     resizedNote.style.width = `${width}px`;
     resizedNote.style.left = `${rightAnchor - width}px`;
 }
 
-function resizeRight(mouseX, mouseY) {
+function resizeRight() {
     const displayRect = displayWindow.getBoundingClientRect();
     const displayEndX = displayRect.right;
 
     const maxNoteWidth = displayEndX - resizedNote.getBoundingClientRect().left;
 
-    const width = Math.max(minNoteWidth, Math.min(maxNoteWidth, mouseX + resizeOffset));
+    const width = Math.max(minNoteWidth, Math.min(maxNoteWidth, mouseX + resizeRightOffset));
     
     resizedNote.style.width = `${width}px`;
+}
+
+function callMoveFunctions() {
+    if (dragging) {
+        dragNote();
+    }
+
+    if (resizingLeft) {
+        resizeLeft();
+    }
+
+    if (resizingRight) {
+        resizeRight();
+    }
 }
 
 function onMouseMove(event) {
     event.preventDefault();
 
-    let mouseX = event.clientX;
-    let mouseY = event.clientY;
+    mouseX = event.clientX;
+    mouseY = event.clientY;
 
-    if (dragging) {
-        dragNote(mouseX, mouseY);
-    }
-
-    if (resizingLeft) {
-        resizeLeft(mouseX, mouseY);
-    }
-
-    if (resizingRight) {
-        resizeRight(mouseX, mouseY);
-    }
+    callMoveFunctions();
 }
 
 window.addEventListener("mouseup", mouseUp);
