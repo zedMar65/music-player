@@ -1,12 +1,12 @@
 let notes = [
-    {start: 0, dur: 2, freq: 8},
-    {start: 1, dur: 2, freq: 7},
-    {start: 2, dur: 2, freq: 6},
-    {start: 3, dur: 2, freq: 5},
-    {start: 4, dur: 2, freq: 4},
-    {start: 5, dur: 2, freq: 3},
-    {start: 6, dur: 2, freq: 2},
-    {start: 7, dur: 2, freq: 1},
+    {start:   0, dur: 200, freq: 8},
+    {start: 100, dur: 200, freq: 7},
+    {start: 200, dur: 200, freq: 6},
+    {start: 300, dur: 200, freq: 5},
+    {start: 400, dur: 200, freq: 4},
+    {start: 500, dur: 200, freq: 3},
+    {start: 600, dur: 200, freq: 2},
+    {start: 700, dur: 200, freq: 1},
 ]
 
 const displayWindow = document.querySelector(".display");
@@ -103,14 +103,8 @@ function mouseUp(event) {
         if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
             // crazy
         } else {
-            const note = document.createElement("div");
-            note.classList.add("note");
             const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - shadowNote.clientWidth);
-            note.style.left = `${leftValue}px`;
-            note.style.width = `${draggedNote.clientWidth}px`;
-
-            note.addEventListener("mousedown", mouseDown);
-            lines[currentLine].appendChild(note);
+            displayNote({start: leftValue, dur: draggedNote.clientWidth, freq: currentLine + 1});
         }
     }
 
