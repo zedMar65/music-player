@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Muzika</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="http://unpkg.com/tone"></script>
+</head>
+
+<body>
+    <header class="header">
+        <h1>Muzika</h1>
+    </header>
+
+    <div class="scroll">
+        <div class="display">
+            <div class="vertical-lines">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+            <div class="drag-note"></div>
+        </div>
+    </div>
+    <div class="controls">
+        <button onclick="playNotes()">Groti</button>
+        <div>
+            <input type="range" id="volume" name="volume" min="0" max="10" />
+            <label for="volume">Garsas</label>
+        </div>
+    </div>
+
+    <script src="display.js"></script>
+    <script src="player.js"></script>
+</body>
+
+</html>
