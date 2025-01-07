@@ -4,6 +4,7 @@
 <head>
     <title>Muzika</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="http://unpkg.com/tone"></script>
 </head>
 
 <body>
@@ -40,11 +41,16 @@
             <div class="drag-note"></div>
         </div>
     </div>
-
     <div class="controls">
+        <button onclick="playNotes()">Groti</button>
+        <div>
+            <input type="range" id="volume" name="volume" min="0" max="40" />
+            <label for="volume">Garsas</label>
+        </div>
     </div>
 
     <script src="display.js"></script>
+    <script src="player.js"></script>
 </body>
 
 </html>

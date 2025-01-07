@@ -42,6 +42,7 @@ function displayNotes(noteList) {
 function displayNote(note) {
     let noteElement = document.createElement("div");
     noteElement.classList.add("note");
+
     noteElement.classList.add("note-position");
     noteElement.style.left = `${note.start}px`;
     noteElement.style.width = `${note.dur}px`;
@@ -226,7 +227,7 @@ function mouseUp(event) {
 function dragNote() {
     draggedNote.style.left = `${mouseX+offsetX}px`;
     draggedNote.style.top = `${mouseY+offsetY}px`;
-
+  
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
     const displayY = displayRect.top;
