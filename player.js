@@ -1,23 +1,7 @@
-const pxpersecond = 100;
+let speed = 400;
 
-const sounds = [];
-
-let test_notes = [
-    { start: 0, dur: 200, freq: 8 },
-    { start: 100, dur: 200, freq: 7 },
-    { start: 200, dur: 200, freq: 6 },
-    { start: 300, dur: 200, freq: 5 },
-    { start: 400, dur: 200, freq: 4 },
-    { start: 500, dur: 200, freq: 3 },
-    { start: 600, dur: 200, freq: 2 },
-    { start: 700, dur: 200, freq: 1 },
-]
-
-
-for (let i = 2; i < 13; i++) {
-    const sound = T("sin", { freq: i * 100, mul: 0 });
-    sound.play();
-    sounds.push(sound);
+function getFreq(freq) {
+    return Tone.Frequency("C4").harmonize([freq - 1])[0];
 }
 
 function getNotes() {
@@ -27,23 +11,25 @@ function getNotes() {
     const noteElements = document.querySelectorAll(".note");
     noteElements.forEach(note => {
         if (note.classList.contains("shadow-note")) return;
-        const start = note.getBoundingClientRect().left - displayWindowX;
-        const freq = note.attributes.getNamedItem("data-freq").value;
-        notes.push({ dur: note.clientWidth, start: start, freq: Number(freq) });
+        const dur = note.clientWidth / speed;
+        const start = (note.getBoundingClientRect().left - displayWindowX) / speed;
+        const freq = getFreq(Number(note.attributes.getNamedItem("data-freq").value));
+        notes.push({ dur, start, freq: freq });
     });
 
     return notes;
 }
 
-function playNote(note) {
-    setTimeout(() => {
-        sounds[note.freq - 1].set({ mul: 0.1 });
-        setTimeout(() => sounds[note.freq - 1].pause(), note.dur * 1000 / pxpersecond);
-    }, note.start * 1000 / pxpersecond);
-}
+const activeSynth = [];
 
 function playNotes() {
+    activeSynth.forEach(synth => synth.disconnect());
+    const volume = document.getElementById("volume").value;
     const notes = getNotes();
-    // const notes = test_notes;
-    notes.forEach(note => playNote(note));
+    notes.forEach(note => {
+        const synth = new Tone.Synth({ volume }).toDestination();
+        const now = Tone.now();
+        synth.triggerAttackRelease(note.freq, note.dur, now + note.start);
+        activeSynth.push(synth);
+    });
 }
