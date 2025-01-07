@@ -1,12 +1,12 @@
 let notes = [
-    {start:   0, dur: 200, freq: 8},
-    {start: 100, dur: 200, freq: 7},
-    {start: 200, dur: 200, freq: 6},
-    {start: 300, dur: 200, freq: 5},
-    {start: 400, dur: 200, freq: 4},
-    {start: 500, dur: 200, freq: 3},
-    {start: 600, dur: 200, freq: 2},
-    {start: 700, dur: 200, freq: 1},
+    { start: 0, dur: 200, freq: 8 },
+    { start: 100, dur: 200, freq: 7 },
+    { start: 200, dur: 200, freq: 6 },
+    { start: 300, dur: 200, freq: 5 },
+    { start: 400, dur: 200, freq: 4 },
+    { start: 500, dur: 200, freq: 3 },
+    { start: 600, dur: 200, freq: 2 },
+    { start: 700, dur: 200, freq: 1 },
 ]
 
 let mouseX = 0;
@@ -46,6 +46,7 @@ function displayNote(note) {
     noteElement.classList.add("note-position");
     noteElement.style.left = `${note.start}px`;
     noteElement.style.width = `${note.dur}px`;
+    noteElement.setAttribute("data-freq", note.freq);
 
     let resizeLeft = document.createElement("div");
     resizeLeft.classList.add("resize-left");
@@ -196,7 +197,7 @@ function stopDragging() {
             // crazy
         } else {
             const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - shadowNote.clientWidth);
-            displayNote({start: leftValue, dur: draggedNote.clientWidth, freq: currentLine + 1});
+            displayNote({ start: leftValue, dur: draggedNote.clientWidth, freq: currentLine + 1 });
         }
     }
 
@@ -225,9 +226,9 @@ function mouseUp(event) {
 }
 
 function dragNote() {
-    draggedNote.style.left = `${mouseX+offsetX}px`;
-    draggedNote.style.top = `${mouseY+offsetY}px`;
-  
+    draggedNote.style.left = `${mouseX + offsetX}px`;
+    draggedNote.style.top = `${mouseY + offsetY}px`;
+
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
     const displayY = displayRect.top;
@@ -262,7 +263,7 @@ function resizeRight() {
     const maxNoteWidth = displayEndX - resizedNote.getBoundingClientRect().left;
 
     const width = Math.max(minNoteWidth, Math.min(maxNoteWidth, mouseX + resizeRightOffset));
-    
+
     resizedNote.style.width = `${width}px`;
 }
 
@@ -281,7 +282,9 @@ function callMoveFunctions() {
 }
 
 function onMouseMove(event) {
-    event.preventDefault();
+    if (dragging || resizingLeft || resizingRight) {
+        event.preventDefault();
+    }
 
     mouseX = event.clientX;
     mouseY = event.clientY;
