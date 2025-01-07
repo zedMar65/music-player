@@ -63,14 +63,34 @@ body {
     background-color: #55e3ed;
     position: absolute;
     z-index: 2;
-    pointer-events: none;
+    cursor: move;
+}
+
+.note-position {
+    position: absolute;
+    height: 100%;
 }
 
 .note {
-    position: absolute;
     background-color: #55e3ed;
-    height: 100%;
     z-index: 1;
+    cursor: move;
+}
+
+.resize-left, .resize-right {
+    position: absolute;
+    width: 10px;
+    height: 100%;
+    z-index: 3;
+    cursor: ew-resize;
+}
+
+.resize-left {
+    left: 0;
+}
+
+.resize-right {
+    right: 0;
 }
 
 .controls {
