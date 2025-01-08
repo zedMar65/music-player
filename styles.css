@@ -123,3 +123,18 @@ body {
     padding: 8px;
     border-color: #74bce3;
 }
+
+.instruction {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+}
+
+.left-click {
+    height: 2em;
+}
+
+.shift-key {
+    height: 3em;
+}
