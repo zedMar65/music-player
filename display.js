@@ -62,6 +62,7 @@ function displayNote(note) {
 }
 
 const minNoteWidth = 30;
+let noteWidth = 100;
 
 // Dragging
 let rawOffsetX = 0;
@@ -103,6 +104,23 @@ function recalculateOffsets() { // Fixes the offsets when the window position ch
 
 scrollContainer.addEventListener("scroll", recalculateOffsets);
 
+function calculateNotePosition() {
+    const displayRect = displayWindow.getBoundingClientRect();
+    const displayX = displayRect.left;
+    const displayY = displayRect.top;
+
+    const lineHeight = displayWindow.clientHeight / lineCount;
+    const windowWidth = displayWindow.clientWidth;
+
+    const currentLine = Math.floor((mouseY - displayY) / lineHeight);
+    if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
+        return false;
+    }
+    const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - noteWidth);
+
+    return {left: leftValue, freq: currentLine + 1};
+}
+
 function startDragging(note) {
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
@@ -111,7 +129,7 @@ function startDragging(note) {
     const noteRect = note.getBoundingClientRect();
     const noteX = noteRect.left;
     const noteY = noteRect.top;
-    const noteWidth = noteRect.width;
+    noteWidth = noteRect.width;
     const noteHeight = noteRect.height;
 
     rawOffsetX = noteX - mouseX;
@@ -139,7 +157,7 @@ function startResizingLeft(note) {
 
     const noteRect = note.getBoundingClientRect();
     const noteX = noteRect.left;
-    const noteWidth = noteRect.width;
+    noteWidth = noteRect.width;
 
     rawResizeLeftOffset = noteX - mouseX;
     rawRightAnchor = noteX + noteWidth - displayX;
@@ -155,7 +173,7 @@ function startResizingRight(note) {
     const displayX = displayRect.left;
 
     const noteRect = note.getBoundingClientRect();
-    const noteWidth = noteRect.width;
+    noteWidth = noteRect.width;
 
     rawResizeRightOffset = noteWidth - mouseX + displayX;
 
@@ -165,39 +183,16 @@ function startResizingRight(note) {
     resizingRight = true;
 }
 
-function mouseDown(event) {
-    event.preventDefault();
-
-    const target = event.target;
-
-    if (target.classList.contains("note")) {
-        startDragging(target);
-    }
-
-    if (target.classList.contains("resize-left")) {
-        startResizingLeft(target.parentElement);
-    }
-
-    if (target.classList.contains("resize-right")) {
-        startResizingRight(target.parentElement);
-    }
-}
-
 function stopDragging() {
     if (dragging) {
-        const displayRect = displayWindow.getBoundingClientRect();
-        const displayX = displayRect.left;
-        const displayY = displayRect.top;
+        const position = calculateNotePosition();
 
-        const lineHeight = displayWindow.clientHeight / lineCount;
-        const windowWidth = displayWindow.clientWidth;
-
-        const currentLine = Math.floor((mouseY - displayY) / lineHeight);
-        if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
-            // crazy
-        } else {
-            const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - shadowNote.clientWidth);
-            displayNote({ start: leftValue, dur: draggedNote.clientWidth, freq: currentLine + 1 });
+        if (position) {
+            displayNote({
+                start: position.left,
+                dur: noteWidth,
+                freq: position.freq
+            });
         }
     }
 
@@ -217,34 +212,19 @@ function stopResizingRight() {
     resizedNote = null;
 }
 
-function mouseUp(event) {
-    event.preventDefault();
-
-    stopDragging();
-    stopResizingLeft();
-    stopResizingRight();
-}
-
 function dragNote() {
     draggedNote.style.left = `${mouseX + offsetX}px`;
     draggedNote.style.top = `${mouseY + offsetY}px`;
 
-    const displayRect = displayWindow.getBoundingClientRect();
-    const displayX = displayRect.left;
-    const displayY = displayRect.top;
+    const position = calculateNotePosition();
 
-    const lineHeight = displayWindow.clientHeight / lineCount;
-    const windowWidth = displayWindow.clientWidth;
-
-    const currentLine = Math.floor((mouseY - displayY) / lineHeight);
-    if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
+    if (position) {
+        shadowNote.style.display = "block";
+        lines[position.freq - 1].appendChild(shadowNote);
+        shadowNote.style.left = `${position.left}px`;
+    } else {
         shadowNote.style.display = "none";
-        return;
-    }
-    shadowNote.style.display = "block";
-    lines[currentLine].appendChild(shadowNote);
-    const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - shadowNote.clientWidth);
-    shadowNote.style.left = `${leftValue}px`;
+    }    
 }
 
 function resizeLeft() {
@@ -281,10 +261,35 @@ function callMoveFunctions() {
     }
 }
 
-function onMouseMove(event) {
-    if (dragging || resizingLeft || resizingRight) {
-        event.preventDefault();
+function mouseDown(event) {
+    event.preventDefault();
+
+    const target = event.target;
+
+    if (target.classList.contains("note")) {
+        startDragging(target);
     }
+
+    if (target.classList.contains("resize-left")) {
+        startResizingLeft(target.parentElement);
+    }
+
+    if (target.classList.contains("resize-right")) {
+        startResizingRight(target.parentElement);
+    }
+}
+
+function mouseUp(event) {
+    event.preventDefault();
+
+    stopDragging();
+    stopResizingLeft();
+    stopResizingRight();
+    noteWidth = 100;
+}
+
+function onMouseMove(event) {
+    event.preventDefault();
 
     mouseX = event.clientX;
     mouseY = event.clientY;
@@ -292,7 +297,29 @@ function onMouseMove(event) {
     callMoveFunctions();
 }
 
-window.addEventListener("mouseup", mouseUp);
-window.addEventListener("mousemove", onMouseMove);
+function onClick(event) {
+    event.preventDefault();
+
+    if (event.target.classList.contains("line") && event.target.parentElement.classList.contains("display")) {
+        rawOffsetX = 0;
+        rawOffsetY = 0;
+
+        recalculateOffsets();
+
+        const position = calculateNotePosition();
+
+        if (position) {
+            displayNote({
+                start: position.left,
+                dur: 100,
+                freq: position.freq
+            });
+        }
+    }
+}
+
+displayWindow.addEventListener("mouseup", mouseUp);
+displayWindow.addEventListener("mousemove", onMouseMove);
+displayWindow.addEventListener("click", onClick);
 
 displayNotes(notes);
