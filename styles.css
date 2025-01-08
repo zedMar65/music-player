@@ -104,6 +104,13 @@ body {
 .controls {
     display: flex;
     align-items: center;
+    gap: 32px;
+}
+
+.volume-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .controls button {
@@ -114,5 +121,4 @@ body {
     margin: 0;
     padding: 8px;
     border-color: #74bce3;
-    margin-right: 32px;
 }
