@@ -99,6 +99,7 @@ body {
 
 .shadow-note {
     background-color: #55e3ed80;
+    pointer-events: none;
 }
 
 .controls {
