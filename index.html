@@ -47,12 +47,14 @@
                 <img src="./play.svg" id="play" alt="Groti" />
             </button>
             <div class="input-range">
-                <input type="range" id="volume" name="volume" min="0" max="10" />
-                <label for="volume">Garsas</label>
+                <input type="range" id="volume" name="volume" min="0" max="10" value="5"
+                    oninput="this.nextElementSibling.innerText = `Garsas (${this.value})`" />
+                <label for="volume">Garsas (5)</label>
             </div>
             <div class="input-range">
-                <input type="range" id="speed" name="speed" min="50" max="500" value="300" />
-                <label for="speed">Greitis</label>
+                <input type="range" id="speed" name="speed" min="50" max="500" value="300"
+                    oninput="this.nextElementSibling.innerText = `Greitis (${this.value})`" />
+                <label for="speed">Greitis (300)</label>
             </div>
         </div>
         <div class="controls-right">

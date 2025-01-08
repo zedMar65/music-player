@@ -26,7 +26,9 @@ async function importNotes() {
         const text = await navigator.clipboard.readText();
         const data = JSON.parse(text);
         document.getElementById("volume").value = data.volume;
+        document.getElementById("volume").nextElementSibling.innerHTML = `Garsas (${data.volume})`;
         document.getElementById("speed").value = data.speed;
+        document.getElementById("speed").nextElementSibling.innerHTML = `Greitis (${data.speed})`;
         // note display to do
     } catch (e) {
         console.log("failed to import data: ", e);
