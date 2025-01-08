@@ -100,6 +100,7 @@ body {
 
 .shadow-note {
     background-color: #55e3ed80;
+    pointer-events: none;
 }
 
 .controls {
@@ -108,9 +109,10 @@ body {
     justify-content: space-between;
 }
 
-.controls-left {
+.controls-left, .controls-right {
     display: flex;
     align-items: center;
+    gap: 32px;
 }
 
 .controls-left button {
@@ -118,12 +120,11 @@ body {
     border-radius: 0;
     outline: none;
     margin: 0;
-    margin-right: 32px;
     border: none;
 }
 
 .controls .input-range {
-    margin-right: 32px;
+    min-width: 240px;
 }
 
 .controls .input-range input {
@@ -131,10 +132,24 @@ body {
 }
 
 .controls-right button {
-    margin-left: 32px;
     padding: 12px;
     font: inherit;
     background-color: transparent;
     outline: none;
     border: 2px solid #74bce3;
+}
+
+.instruction {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+}
+
+.left-click {
+    height: 2em;
+}
+
+.shift-key {
+    height: 3em;
 }
