@@ -2,14 +2,14 @@
 <html>
 
 <head>
-    <title>Muzika</title>
+    <title>Muzikos kūrimas</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="http://unpkg.com/tone"></script>
 </head>
 
 <body>
     <header class="header">
-        <h1>Muzika</h1>
+        <h1>Muzikos kūrimas</h1>
     </header>
 
     <div class="scroll">
@@ -42,15 +42,30 @@
         </div>
     </div>
     <div class="controls">
-        <button onclick="playNotes()">Groti</button>
-        <div>
-            <input type="range" id="volume" name="volume" min="0" max="10" />
-            <label for="volume">Garsas</label>
+        <div class="controls-left">
+            <button onclick="playNotes()">
+                <img src="./play.svg" id="play" alt="Groti" />
+            </button>
+            <div class="input-range">
+                <input type="range" id="volume" name="volume" min="0" max="10" value="5"
+                    oninput="this.nextElementSibling.innerText = `Garsas (${this.value})`" />
+                <label for="volume">Garsas (5)</label>
+            </div>
+            <div class="input-range">
+                <input type="range" id="speed" name="speed" min="50" max="500" value="300"
+                    oninput="this.nextElementSibling.innerText = `Greitis (${this.value})`" />
+                <label for="speed">Greitis (300)</label>
+            </div>
+        </div>
+        <div class="controls-right">
+            <button onclick="importNotes()">Įkelti</button>
+            <button onclick="exportNotes()">Atsisiųsti</button>
         </div>
     </div>
 
     <script src="display.js"></script>
     <script src="player.js"></script>
+    <script src="note.js"></script>
 </body>
 
 </html>
