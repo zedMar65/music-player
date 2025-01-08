@@ -33,6 +33,12 @@ shadowNote.classList.add("note-position");
 shadowNote.classList.add("shadow-note");
 shadowNote.style.display = "none";
 
+function clearNotes() {
+    document.querySelectorAll(".note").forEach(note => {
+        note.remove();
+    });
+}
+
 function displayNotes(noteList) {
     noteList.forEach(note => {
         displayNote(note);

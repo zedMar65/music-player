@@ -29,6 +29,9 @@ async function importNotes() {
         document.getElementById("volume").nextElementSibling.innerHTML = `Garsas (${data.volume})`;
         document.getElementById("speed").value = data.speed;
         document.getElementById("speed").nextElementSibling.innerHTML = `Greitis (${data.speed})`;
+        clearNotes();
+        const notes = data.notes;
+        displayNotes(notes);
         // note display to do
     } catch (e) {
         console.log("failed to import data: ", e);
