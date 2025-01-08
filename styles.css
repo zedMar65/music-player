@@ -109,9 +109,10 @@ body {
     justify-content: space-between;
 }
 
-.controls-left {
+.controls-left, .controls-right {
     display: flex;
     align-items: center;
+    gap: 32px;
 }
 
 .controls-left button {
@@ -119,12 +120,11 @@ body {
     border-radius: 0;
     outline: none;
     margin: 0;
-    margin-right: 32px;
     border: none;
 }
 
 .controls .input-range {
-    margin-right: 32px;
+    min-width: 240px;
 }
 
 .controls .input-range input {
@@ -132,7 +132,6 @@ body {
 }
 
 .controls-right button {
-    margin-left: 32px;
     padding: 12px;
     font: inherit;
     background-color: transparent;
