@@ -120,9 +120,7 @@ function calculateNotePosition() {
     const windowWidth = displayWindow.clientWidth;
 
     const currentLine = Math.floor((mouseY - displayY) / lineHeight);
-    console.log(currentLine);
     if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
-        console.log("Invalid position");
         return false;
     }
     const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - noteWidth);
