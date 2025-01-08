@@ -18,14 +18,14 @@ let playTimeout;
 function playNotes() {
     const playIcon = document.getElementById("play");
 
-    if (playIcon.getAttribute("src") == "./stop.svg") {
+    if (playIcon.getAttribute("src") == "img/stop.svg") {
         activeSynth.forEach(synth => synth.disconnect());
-        playIcon.setAttribute("src", "./play.svg");
+        playIcon.setAttribute("src", "img/play.svg");
         clearTimeout(playTimeout);
         return;
     }
 
-    playIcon.setAttribute("src", "./stop.svg");
+    playIcon.setAttribute("src", "img/stop.svg");
     let end = 0;
 
     const volume = document.getElementById("volume").value;
@@ -43,6 +43,6 @@ function playNotes() {
     });
 
     playTimeout = setTimeout(() => {
-        playIcon.setAttribute("src", "./play.svg");
+        playIcon.setAttribute("src", "img/play.svg");
     }, end * 1000);
 }

@@ -44,7 +44,7 @@
     <div class="controls">
         <div class="controls-left">
             <button onclick="playNotes()">
-                <img src="./play.svg" id="play" alt="Groti" />
+                <img src="img/play.svg" id="play" alt="Groti" />
             </button>
             <div class="input-range">
                 <input type="range" id="volume" name="volume" min="0" max="10" value="5"
@@ -56,19 +56,22 @@
                     oninput="this.nextElementSibling.innerText = `Greitis (${this.value})`" />
                 <label for="speed">Greitis (300)</label>
             </div>
-            <p class = "instruction"><img src="left_click.png" alt="Kairysis pelės mygtukas" class="left-click">Padėti naują natą</p>
-            <p class = "instruction"><img src="shift_key.png" alt="Shift" class="shift-key">Matyti, kur bus padėta nauja nata</p>
+            <p class="instruction"><img src="img/left_click.png" alt="Kairysis pelės mygtukas" class="left-click">Padėti
+                naują natą</p>
+            <p class="instruction"><img src="img/shift_key.png" alt="Shift" class="shift-key">Matyti, kur bus padėta
+                nauja
+                nata</p>
         </div>
         <div class="controls-right">
             <button onclick="importNotes()">Įkelti</button>
             <button onclick="exportNotes()">Atsisiųsti</button>
         </div>
-        
+
     </div>
 
-    <script src="display.js"></script>
-    <script src="player.js"></script>
-    <script src="note.js"></script>
+    <script src="src/display.js"></script>
+    <script src="src/player.js"></script>
+    <script src="src/note.js"></script>
 </body>
 
 </html>
