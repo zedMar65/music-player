@@ -14,6 +14,7 @@ let mouseY = 0;
 
 const scrollContainer = document.querySelector(".scroll");
 const displayWindow = document.querySelector(".display");
+const verticalLineContainer = document.querySelector(".vertical-lines");
 const draggedNote = document.querySelector(".drag-note");
 let lines = [];
 
@@ -65,6 +66,8 @@ function displayNote(note) {
     noteElement.addEventListener("mousedown", mouseDown);
 
     lines[note.freq - 1].appendChild(noteElement);
+
+    resizeDisplay();
 }
 
 const minNoteWidth = 30;
@@ -92,6 +95,36 @@ let resizingRight = false;
 let displayingPlacePositionShadow = false;
 
 let resizedNote = null;
+
+const minimumWindowWidth = 2100;
+const rightClearance = 300;
+let currentWindowWidth = minimumWindowWidth;
+
+function drawVerticalLines(n) {
+    verticalLineContainer.innerHTML = "";
+
+    for (let i = 0; i < n; i++) {
+        let line = document.createElement("div");
+        line.classList.add("line");
+        verticalLineContainer.appendChild(line);
+    }
+}
+
+function resizeDisplay() {
+    let displayWidth = 0;
+
+    const noteElements = document.querySelectorAll(".note");
+    const displayX = displayWindow.getBoundingClientRect().left;
+    noteElements.forEach(note => {
+        const noteRight = note.getBoundingClientRect().right - displayX;
+        displayWidth = Math.max(displayWidth, noteRight);
+    });
+
+    displayWidth = Math.max(displayWidth + rightClearance, minimumWindowWidth);
+    displayWindow.style.width = `${displayWidth}px`;
+
+    drawVerticalLines(displayWidth / 100);
+}
 
 function recalculateOffsets() { // Fixes the offsets when the window position changes
     const displayRect = displayWindow.getBoundingClientRect();

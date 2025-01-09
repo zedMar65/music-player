@@ -29,12 +29,12 @@ body {
 
 .display {
     height: 100%;
-    width: 2100px;
     position: relative;
     display: grid;
     grid-template-rows: repeat(14, 1fr);
     background-color: #f5f5f5;
     overflow: hidden;
+    border-right: 1px solid #74bce3;
 }
 
 .display>.line {
@@ -56,7 +56,7 @@ body {
     position: relative;
     border-left: 1px solid #74bce3;
     height: 100%;
-    width: 1px;
+    width: 0px;
 }
 
 .drag-note {
