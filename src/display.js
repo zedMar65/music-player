@@ -89,7 +89,7 @@ let rightAnchor = 0;
 let dragging = false;
 let resizingLeft = false;
 let resizingRight = false;
-let displayingShadowNote = false;
+let displayingPlacePositionShadow = false;
 
 let resizedNote = null;
 
@@ -128,16 +128,18 @@ function calculateNotePosition() {
     return {left: leftValue, freq: currentLine + 1};
 }
 
-function displayShadowNote() {
-    displayingShadowNote = true;
+function updateShadowNote() {
+    if (dragging || (displayingPlacePositionShadow && !resizingLeft && !resizingRight)) {
+        const position = calculateNotePosition();
 
-    const position = calculateNotePosition();
-
-    if (position) {
-        shadowNote.style.display = "block";
-        lines[position.freq - 1].appendChild(shadowNote);
-        shadowNote.style.left = `${position.left}px`;
-        shadowNote.style.width = `${noteWidth}px`;
+        if (position) {
+            shadowNote.style.display = "block";
+            lines[position.freq - 1].appendChild(shadowNote);
+            shadowNote.style.left = `${position.left}px`;
+            shadowNote.style.width = `${noteWidth}px`;
+        } else {
+            shadowNote.style.display = "none";
+        }
     } else {
         shadowNote.style.display = "none";
     }
@@ -163,16 +165,18 @@ function startDragging(note) {
     draggedNote.style.height = `${noteHeight}px`;
 
     dragNote();
-    displayShadowNote();
+    dragging = true;
+    updateShadowNote();
 
     draggedNote.style.display = "block";
 
-    note.remove();
-
-    dragging = true;
+    note.remove();   
 }
 
 function startResizingLeft(note) {
+    resizedNote = note;
+    resizingLeft = true;
+
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
 
@@ -184,12 +188,12 @@ function startResizingLeft(note) {
     rawRightAnchor = noteX + noteWidth - displayX;
 
     recalculateOffsets();
-
-    resizedNote = note;
-    resizingLeft = true;
 }
 
 function startResizingRight(note) {
+    resizedNote = note;
+    resizingRight = true;
+
     const displayRect = displayWindow.getBoundingClientRect();
     const displayX = displayRect.left;
 
@@ -199,14 +203,6 @@ function startResizingRight(note) {
     rawResizeRightOffset = noteWidth - mouseX + displayX;
 
     recalculateOffsets();
-
-    resizedNote = note;
-    resizingRight = true;
-}
-
-function stopDisplayingShadowNote() {
-    displayingShadowNote = false;
-    shadowNote.style.display = "none";
 }
 
 function stopDragging() {
@@ -222,7 +218,6 @@ function stopDragging() {
         }
     }
 
-    stopDisplayingShadowNote();
     draggedNote.style.display = "none";
 
     dragging = false;
@@ -241,8 +236,7 @@ function stopResizingRight() {
 function dragNote() {
     draggedNote.style.left = `${mouseX + offsetX}px`;
     draggedNote.style.top = `${mouseY + offsetY}px`;
-
-    displayShadowNote();   
+    updateShadowNote();
 }
 
 function resizeLeft() {
@@ -270,8 +264,8 @@ function callMoveFunctions() {
         dragNote();
     }
 
-    if (displayingShadowNote) {
-        displayShadowNote();
+    if (displayingPlacePositionShadow) {
+        updateShadowNote();
     }
 
     if (resizingLeft) {
@@ -306,6 +300,9 @@ function mouseUp(event) {
     stopResizingLeft();
     stopResizingRight();
     noteWidth = 100;
+    rawOffsetX = 0;
+    recalculateOffsets();
+    updateShadowNote();
 }
 
 function onMouseMove(event) {
@@ -337,15 +334,19 @@ function onClick(event) {
 
 function onKeyPress(event) {
     if (event.key === "Shift") {
-        rawOffsetX = 0;
-        recalculateOffsets();
-        displayShadowNote();
+        displayingPlacePositionShadow = true;
+        if (!dragging) {
+            rawOffsetX = 0;
+            recalculateOffsets();
+            updateShadowNote();
+        }
     }
 }
 
 function onKeyRelease(event) {
     if (event.key === "Shift") {
-        stopDisplayingShadowNote();
+        displayingPlacePositionShadow = false;
+        updateShadowNote();
     }
 }
 
