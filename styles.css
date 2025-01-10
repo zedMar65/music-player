@@ -45,15 +45,13 @@ body {
 .vertical-lines {
     box-sizing: border-box;
     position: absolute;
-    display: flex;
-    gap: 99px;
     height: 100%;
     width: 100%;
     border-bottom: 1px solid #74bce3;
 }
 
 .vertical-lines .line {
-    position: relative;
+    position: absolute;
     border-left: 1px solid #74bce3;
     height: 100%;
     width: 0px;

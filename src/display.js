@@ -106,6 +106,7 @@ function drawVerticalLines(n) {
     for (let i = 0; i < n; i++) {
         let line = document.createElement("div");
         line.classList.add("line");
+        line.style.left = `${i * 100}px`;
         verticalLineContainer.appendChild(line);
     }
 }
