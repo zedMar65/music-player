@@ -136,7 +136,7 @@ function classifyString(str) {
         return StringType.ACCIDENTAL;
     }
 
-    if (str == '.') {
+    if (str == '.' || str == '*') {
         return StringType.DOT;
     }
 
@@ -224,6 +224,11 @@ function parseTokens(lines) {
             let noteDefined = false;
             let durationDefined = false;
 
+            let dotDefined = false;
+
+            let dotMultiplier = 0.5;
+            let widthMultiplier = 1;
+
             let duration = globalDuration;
             let width = durationToWidth(duration);
             let number = 0;
@@ -304,6 +309,15 @@ function parseTokens(lines) {
                     return;
                 }
 
+                if (token.type == StringType.DOT) {
+                    widthMultiplier += dotMultiplier;
+                    dotMultiplier /= 2;
+
+                    dotDefined = true;
+
+                    return;
+                }
+
                 if (token.type == StringType.INVALID) {
                     console.log("Invalid token at line " + lineIndex + ", note " + noteIndex);
                     error = true;
@@ -312,6 +326,14 @@ function parseTokens(lines) {
             });
 
             if (error) {
+                return;
+            }
+
+            width *= widthMultiplier;
+
+            if (dotDefined && lineType != LineType.NOTES && lineType != LineType.REST) {
+                console.log("Invalid dot at line " + lineIndex + ", note " + noteIndex);
+                error = true;
                 return;
             }
 
