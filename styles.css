@@ -73,6 +73,7 @@ body {
 
 .note {
     background-color: #55e3ed;
+    box-shadow: 0 0 8px 2px inset #74bce3;
     z-index: 1;
     cursor: move;
 }
