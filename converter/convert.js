@@ -184,6 +184,10 @@ function parseText() {
             strings.forEach(function (str) {
                 const type = classifyString(str);
 
+                if (str == '') {
+                    return;
+                }
+
                 parsedNote.push({ str: str, type: type });
             });
 
@@ -233,6 +237,12 @@ function parseTokens(lines) {
                 }
 
                 if (token.type == StringType.NOTE) {
+                    if (lineType != LineType.NONE && lineType != LineType.DURATION && lineType != LineType.NOTES) {
+                        console.log("Invalid note at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
                     if (noteDefined) {
                         console.log("Multiple definitions of the note at line " + lineIndex + ", note " + noteIndex);
                         error = true;
@@ -244,6 +254,26 @@ function parseTokens(lines) {
                     lineType = LineType.NOTES;
 
                     number = parseNote(token.str);
+
+                    return;
+                }
+
+                if (token.type == StringType.REST) {
+                    if (lineType != LineType.NONE && lineType != LineType.DURATION) {
+                        console.log("Invalid rest at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
+                    if (noteDefined) {
+                        console.log("Multiple definitions of the note at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
+                    noteDefined = true;
+
+                    lineType = LineType.REST;
 
                     return;
                 }
@@ -269,9 +299,21 @@ function parseTokens(lines) {
                         return;
                     }
 
+                    durationDefined = true;
+
+                    return;
+                }
+
+                if (token.type == StringType.INVALID) {
+                    console.log("Invalid token at line " + lineIndex + ", note " + noteIndex);
+                    error = true;
                     return;
                 }
             });
+
+            if (error) {
+                return;
+            }
 
             if (lineType == LineType.NOTES) {
                 if (noteDefined == false) {
@@ -296,12 +338,16 @@ function parseTokens(lines) {
                 }
             }
 
+            if (lineType == LineType.REST) {
+                chordWidth = width;
+            }
+
             if (lineType == LineType.DURATION) {
                 globalDuration = duration;
             }
         });
 
-        if (lineType == LineType.NOTES) {
+        if (lineType == LineType.NOTES || lineType == LineType.REST) {
             pos += chordWidth;
         }
     });

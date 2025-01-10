@@ -13,7 +13,10 @@ Everything is written in any letter case.
 
 While music is written left to right, here it is written top to bottom, in lines.
 
-A single line contains a combination of notes (a single note or a chord) or a global modifier.
+A single line can contain:
+- [A combination of notes (a single note or a chord)](#notes);
+- [A rest](#rests);
+- [A global modifier](#global-modifiers).
 
 ## Notes
 
@@ -43,11 +46,19 @@ Length is written as a number that is a power of two.
 
 Length of 1 signifies a whole note, a length of 4 - a quarter note and so on.
 
+If the length token is unused, the note becomes of the [global length](#length-1).
+
+## Rests
+
+A rest is defined with a letter `R`.
+
+A rest is used in its own line.
+
+It can have a [length token](#length) it the same line as well. It works the same as for notes.
+
 ## Global modifiers
 
 Global modifiers affect all the chords after them up to the next modifier of the same type.
-
-## Global modifier types
 
 ### Length
 
@@ -62,3 +73,5 @@ While converting, syntax errors can occur.
 The errors are logged in the browser's console window.
 
 Experiencing an error while converting a note skips the conversion of that note and does not include it in the output. All other succesfully converted notes in the same and other chords will still be converted and outputed.
+
+Be aware that line and note numbers that are outputed in the console are counted starting from 0. That means, that `line 0` means the first line and `line 5` means the fourth.
