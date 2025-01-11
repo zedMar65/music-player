@@ -142,7 +142,8 @@ body {
     margin: 0 4px 0 0;
 }
 
-.instruction .left-click {
+.instruction .left-click,
+.instruction .right-click {
     height: 2em;
 }
 

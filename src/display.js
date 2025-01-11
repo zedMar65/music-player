@@ -56,10 +56,28 @@ function displayNote(note) {
     noteElement.appendChild(resizeRight);
 
     noteElement.addEventListener("mousedown", mouseDown);
+    noteElement.addEventListener("contextmenu", deleteNote);
 
     lines[note.freq - 1].appendChild(noteElement);
 
     resizeDisplay();
+}
+
+function deleteNote(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let note = event.target;
+
+    if (note.classList.contains("resize-left") || note.classList.contains("resize-right")) {
+        note = note.parentElement;
+    }
+
+    if (!note.classList.contains("note")) {
+        return;
+    }
+
+    note.remove();
 }
 
 const minNoteWidth = 30;
@@ -306,6 +324,10 @@ function callMoveFunctions() {
 }
 
 function mouseDown(event) {
+    if (event.button !== 0) {
+        return;
+    }
+
     event.preventDefault();
 
     const target = event.target;
