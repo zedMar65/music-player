@@ -74,6 +74,20 @@ Increases the note length by half of its original (set by length [token](#length
 
 Multiple dots can be used on the same note. A second dot additionally increases the length by 1/4 of the original value. A third - by 1/8 and so on.
 
+### Tie
+
+A tie is created with a `t`.
+
+Tying of more than 2 notes is possible.
+
+A tie applied to a note indicates that it is tied to the next note of the same intial pitch (ignoring [accidentals](#accidentals)).
+
+The last note of the tie should not have a tie token.
+
+Tied notes can't have different accidentals, except for when the first note has an accidental, then other notes can omit it, it will be applied automatically. But they cannot apply a different accidental.
+
+Tie token can only be used once in a note.
+
 ## Rests
 
 A rest is defined with a letter `R`.

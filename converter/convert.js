@@ -236,6 +236,7 @@ function parseTokens(lines) {
     let globalLength = 4;
 
     const accidentals = new Map();
+    const ties = new Map();
 
     lines.forEach(function (line, lineIndex) { // Parsing a line
         let error = false;
@@ -271,6 +272,8 @@ function parseTokens(lines) {
             let accidentalDefined = false;
 
             let newClef = null;
+
+            let tieDefined = false;
 
             note.forEach(function (token, tokenIndex) { // Parsing a token
                 if (error || comment) {
@@ -409,6 +412,26 @@ function parseTokens(lines) {
                     return;
                 }
 
+                if (token.type == StringType.TIE) {
+                    if (lineType != LineType.NONE && lineType != LineType.NOTES && lineType != LineType.LENGTH) {
+                        console.log("Invalid tie at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
+                    if (tieDefined) {
+                        console.log("Multiple ties at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
+                    lineType = LineType.NOTES;
+
+                    tieDefined = true;
+
+                    return;
+                }
+
                 if (lineType != LineType.NONE) {
                     console.log("Invalid " + token.type + " at line " + lineIndex + ", note " + noteIndex);
                     error = true;
@@ -451,6 +474,31 @@ function parseTokens(lines) {
                     return;
                 }
 
+                let tiedPos = pos;
+                let tiedLength = actualLength;
+
+                if (ties.has(number)) {
+                    const tie = ties.get(number);
+
+                    if (accidentalDefined && tie.accidentalShift != accidentalShift) {
+                        console.log("Accidental mismatch in a tie at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
+                    if (tie.start + tie.length != pos) {
+                        console.log("Tie isn't continuous at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
+                    tiedPos = tie.start;
+
+                    accidentalShift = tie.accidentalShift;
+
+                    tiedLength += tie.length;
+                }
+
                 if (accidentalDefined) {
                     accidentals.set(number, accidentalShift);
                 } else {
@@ -459,23 +507,33 @@ function parseTokens(lines) {
                     }
                 }
 
-                number += accidentalShift;
+                let accidentedNumber = number + accidentalShift;
 
-                if (number < 0 || number >= noteAmount) {
+                if (accidentedNumber < 0 || accidentedNumber >= noteAmount) {
                     console.log("Unsupported note pitch at position " + index + ", note " + noteIndex);
                     error = true;
                     return;
                 }
-
-                const frequency = frequencyHz[number];
-
-                noteArray.push({ start: convertUnits(pos), dur: convertUnits(actualLength), freq: frequency });
 
                 if (chordWidth == null) {
                     chordWidth = actualLength;
                 } else {
                     chordWidth = Math.min(chordWidth, actualLength);
                 }
+
+                if (tieDefined) {
+                    ties.set(number, { accidentalShift: accidentalShift, length: tiedLength, start: tiedPos });
+
+                    return;
+                }
+
+                if (ties.has(number)) {
+                    ties.delete(number);
+                }
+
+                const frequency = frequencyHz[accidentedNumber];
+
+                noteArray.push({ start: convertUnits(tiedPos), dur: convertUnits(tiedLength), freq: frequency });
             }
 
             if (lineType == LineType.CLEF) {
@@ -515,6 +573,10 @@ function parseTokens(lines) {
             pos += chordWidth;
         }
     });
+
+    if (ties.size > 0) {
+        console.log("Unterminated ties");
+    }
 
     const output = JSON.stringify({ notes: noteArray, volume: 5, speed: 300 });
 
