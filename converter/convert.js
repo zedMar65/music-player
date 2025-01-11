@@ -419,6 +419,12 @@ function parseTokens(lines) {
 
                     return;
                 }
+
+                if (token.type == StringType.BAR) {
+                    lineType = LineType.BAR;
+
+                    return;
+                }
             });
 
             if (error) {
@@ -487,6 +493,10 @@ function parseTokens(lines) {
                     pos = posBass;
                     defaultOctave = 3;
                 }
+            }
+
+            if (lineType == LineType.BAR) {
+                accidentals.clear();
             }
 
             if (lineType == LineType.REST) {

@@ -104,6 +104,12 @@ Bass clef sets the default octave to 3.
 
 Using clefs creates two seperate sequences of notes. Notes in the treble clef do not affect the notes in bass clef. That means that if you add some notes in treble clef and switch to bass clef, following notes will be added at the beggining of the musical sequence and not after the notes in the treble clef. After switching back to treble clef the notes will be added after the notes in treble clef.
 
+### Bars
+
+A bar is defined with `|`.
+
+A bar cancels all [accidentals](#accidentals).
+
 ## Errors
 
 While converting, syntax errors can occur.

@@ -1,7 +1,17 @@
-c ^
+bass
+c+ ^
+treble
+e
 c
 d _
 = c
 c
 d
-d ^ ^
+bass
+d+ ^ ^
+treble
+d
+|
+d
+bass
+d+
