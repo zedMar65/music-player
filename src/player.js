@@ -38,7 +38,7 @@ function stop() {
 }
 
 function play() {
-    if (playIcon.getAttribute("src") == "img/stop.svg") stop();
+    if (playIcon.getAttribute("src") == "img/stop.svg") return stop();
     playIcon.setAttribute("src", "img/stop.svg");
     currentLine.style.display = "block";
 
@@ -56,7 +56,7 @@ function play() {
     });
 
     currentLine.style.transitionDuration = end + "s";
-    currentLine.style.left = end * speed + "px";
+    currentLine.style.left = end * +speedInput.value + "px";
 
     stopTimeout = setTimeout(() => stop(), (end + 0.5) * 1000);
 }
