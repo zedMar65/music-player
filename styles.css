@@ -55,6 +55,7 @@ body {
     border-left: 1px solid #74bce3;
     height: 100%;
     width: 0px;
+    pointer-events: none;
 }
 
 #current-line {
@@ -118,12 +119,17 @@ body {
 }
 
 .controls button,
-.controls select {
+.controls select,
+#snapping {
     padding: 12px;
     border: 2px solid #74bce3;
     outline: none;
     background-color: transparent;
     font: inherit;
+}
+
+#snapping {
+    width: 50px;
 }
 
 .controls .import-button {
