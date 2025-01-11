@@ -10,6 +10,7 @@ const playIcon = document.getElementById("play");
 const volumeInput = document.getElementById("volume");
 const speedInput = document.getElementById("speed");
 const octaveInput = document.getElementById("octave");
+const currentLine = document.getElementById("current-line");
 
 let activeSynth = [];
 let stopTimeout;
@@ -30,13 +31,16 @@ function parseNotes(notes) {
 function stop() {
     clearTimeout(stopTimeout);
     playIcon.setAttribute("src", "img/play.svg");
+    currentLine.style.display = "none";
+    currentLine.style.left = 0;
     activeSynth.forEach(synth => synth.disconnect());
     activeSynth = [];
 }
 
 function play() {
-    if (playIcon.getAttribute("src") == "img/stop.svg") stop();
+    if (playIcon.getAttribute("src") == "img/stop.svg") return stop();
     playIcon.setAttribute("src", "img/stop.svg");
+    currentLine.style.display = "block";
 
     const notes = parseNotes(getNotes());
     const now = Tone.now();
@@ -50,6 +54,9 @@ function play() {
         const end1 = note.start + note.dur;
         end = Math.max(end, end1);
     });
+
+    currentLine.style.transitionDuration = end + "s";
+    currentLine.style.left = end * +speedInput.value + "px";
 
     stopTimeout = setTimeout(() => stop(), (end + 0.5) * 1000);
 }
