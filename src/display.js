@@ -1,5 +1,3 @@
-let notes = [];
-
 let mouseX = 0;
 let mouseY = 0;
 
@@ -9,7 +7,7 @@ const verticalLineContainer = document.querySelector(".vertical-lines");
 const draggedNote = document.querySelector(".drag-note");
 let lines = [];
 
-const lineCount = 13;
+const lineCount = 12;
 
 displayWindow.style.gridTemplateRows = `repeat(${lineCount}, 1fr)`;
 
@@ -31,13 +29,6 @@ function clearNotes() {
     });
 }
 
-function displayNotes(noteList) {
-    noteList.forEach(note => {
-        displayNote(note);
-    });
-    resizeDisplay();
-}
-
 function displayNote(note) {
     let noteElement = document.createElement("div");
     noteElement.classList.add("note");
@@ -46,6 +37,7 @@ function displayNote(note) {
     noteElement.style.left = `${note.start}px`;
     noteElement.style.width = `${note.dur}px`;
     noteElement.setAttribute("data-freq", note.freq);
+    noteElement.setAttribute("data-octave", +octaveInput.value);
 
     let resizeLeft = document.createElement("div");
     resizeLeft.classList.add("resize-left");
@@ -382,4 +374,4 @@ displayWindow.addEventListener("click", onClick);
 document.addEventListener("keydown", onKeyPress);
 document.addEventListener("keyup", onKeyRelease);
 
-displayNotes(notes);
+resizeDisplay();

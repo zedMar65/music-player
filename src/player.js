@@ -16,16 +16,7 @@ let activeSynth = [];
 let stopTimeout;
 
 function getFreq(note, octave) {
-    return frequencyHz[note - 1 + 12 * (octave - 1)];
-}
-
-function parseNotes(notes) {
-    return notes.map(note => {
-        const dur = note.dur / +speedInput.value;
-        const start = note.start / +speedInput.value;
-        const freq = getFreq(14 - note.freq, +octaveInput.value);
-        return { dur, start, freq };
-    })
+    return frequencyHz[note - 1 + 12 * (octave - 2)];
 }
 
 function stop() {
@@ -42,7 +33,7 @@ function play() {
     playIcon.setAttribute("src", "img/stop.svg");
     currentLine.style.display = "block";
 
-    const notes = parseNotes(getNotes());
+    const notes = getNotes();
     const now = Tone.now();
     let end = 0;
 
