@@ -1,14 +1,3 @@
-let notes = [
-    { start: 0, dur: 200, freq: 8 },
-    { start: 100, dur: 200, freq: 7 },
-    { start: 200, dur: 200, freq: 6 },
-    { start: 300, dur: 200, freq: 5 },
-    { start: 400, dur: 200, freq: 4 },
-    { start: 500, dur: 200, freq: 3 },
-    { start: 600, dur: 200, freq: 2 },
-    { start: 700, dur: 200, freq: 1 },
-]
-
 let mouseX = 0;
 let mouseY = 0;
 
@@ -18,7 +7,7 @@ const verticalLineContainer = document.querySelector(".vertical-lines");
 const draggedNote = document.querySelector(".drag-note");
 let lines = [];
 
-const lineCount = 16;
+const lineCount = 12;
 
 displayWindow.style.gridTemplateRows = `repeat(${lineCount}, 1fr)`;
 
@@ -40,12 +29,6 @@ function clearNotes() {
     });
 }
 
-function displayNotes(noteList) {
-    noteList.forEach(note => {
-        displayNote(note);
-    });
-}
-
 function displayNote(note) {
     let noteElement = document.createElement("div");
     noteElement.classList.add("note");
@@ -54,6 +37,7 @@ function displayNote(note) {
     noteElement.style.left = `${note.start}px`;
     noteElement.style.width = `${note.dur}px`;
     noteElement.setAttribute("data-freq", note.freq);
+    noteElement.setAttribute("data-octave", +octaveInput.value);
 
     let resizeLeft = document.createElement("div");
     resizeLeft.classList.add("resize-left");
@@ -97,7 +81,7 @@ let displayingPlacePositionShadow = false;
 let resizedNote = null;
 
 const minimumWindowWidth = 2100;
-const rightClearance = 300;
+const rightClearance = 600;
 let currentWindowWidth = minimumWindowWidth;
 
 function drawVerticalLines(n) {
@@ -106,6 +90,7 @@ function drawVerticalLines(n) {
     for (let i = 0; i < n; i++) {
         let line = document.createElement("div");
         line.classList.add("line");
+        line.style.left = `${i * 100}px`;
         verticalLineContainer.appendChild(line);
     }
 }
@@ -158,7 +143,7 @@ function calculateNotePosition() {
     }
     const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - noteWidth);
 
-    return {left: leftValue, freq: currentLine + 1};
+    return { left: leftValue, freq: currentLine + 1 };
 }
 
 function updateShadowNote() {
@@ -203,7 +188,7 @@ function startDragging(note) {
 
     draggedNote.style.display = "block";
 
-    note.remove();   
+    note.remove();
 }
 
 function startResizingLeft(note) {
@@ -389,4 +374,4 @@ displayWindow.addEventListener("click", onClick);
 document.addEventListener("keydown", onKeyPress);
 document.addEventListener("keyup", onKeyRelease);
 
-displayNotes(notes);
+resizeDisplay();
