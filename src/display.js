@@ -1,4 +1,4 @@
-let notes = []
+let notes = [];
 
 let mouseX = 0;
 let mouseY = 0;
@@ -35,6 +35,7 @@ function displayNotes(noteList) {
     noteList.forEach(note => {
         displayNote(note);
     });
+    resizeDisplay();
 }
 
 function displayNote(note) {

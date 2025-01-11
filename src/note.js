@@ -32,7 +32,6 @@ async function importNotes() {
         clearNotes();
         const notes = data.notes;
         displayNotes(notes);
-        // note display to do
     } catch (e) {
         console.log("failed to import data: ", e);
     }

@@ -6,52 +6,50 @@ const frequencyHz = [
     1046.5, 1108.73, 1174.66, 1244.51, 1318.51, 1396.91, 1479.98, 1567.98, 1661.22, 1760, 1864.66, 1975.53,
 ];
 
+const playIcon = document.getElementById("play");
+const volumeInput = document.getElementById("volume");
+const speedInput = document.getElementById("speed");
+const octaveInput = document.getElementById("octave");
+
+let activeSynth = [];
+let stopTimeout;
+
 function getFreq(note, octave) {
     return frequencyHz[note - 1 + 12 * (octave - 1)];
 }
 
 function parseNotes(notes) {
-    const speed = document.getElementById("speed").value;
-    const octave = document.getElementById("octave").value;
     return notes.map(note => {
-        const dur = note.dur / speed;
-        const start = note.start / speed;
-        const freq = getFreq(14 - note.freq, octave);
+        const dur = note.dur / +speedInput.value;
+        const start = note.start / +speedInput.value;
+        const freq = getFreq(14 - note.freq, +octaveInput.value);
         return { dur, start, freq };
     })
 }
 
-const activeSynth = [];
-let playTimeout;
+function stop() {
+    clearTimeout(stopTimeout);
+    playIcon.setAttribute("src", "img/play.svg");
+    activeSynth.forEach(synth => synth.disconnect());
+    activeSynth = [];
+}
 
-function playNotes() {
-    const playIcon = document.getElementById("play");
-
-    if (playIcon.getAttribute("src") == "img/stop.svg") {
-        activeSynth.forEach(synth => synth.disconnect());
-        playIcon.setAttribute("src", "img/play.svg");
-        clearTimeout(playTimeout);
-        return;
-    }
-
+function play() {
+    if (playIcon.getAttribute("src") == "img/stop.svg") stop();
     playIcon.setAttribute("src", "img/stop.svg");
-    let end = 0;
 
-    const volume = document.getElementById("volume").value;
     const notes = parseNotes(getNotes());
     const now = Tone.now();
+    let end = 0;
 
     notes.forEach(note => {
-        const synth = new Tone.Synth({ volume }).toDestination();
+        const synth = new Tone.Synth({ volume: +volumeInput.value }).toDestination();
         synth.triggerAttackRelease(note.freq, note.dur, now + note.start);
         activeSynth.push(synth);
 
-        if (note.start + note.dur > end) {
-            end = note.start + note.dur;
-        }
+        const end1 = note.start + note.dur;
+        end = Math.max(end, end1);
     });
 
-    playTimeout = setTimeout(() => {
-        playIcon.setAttribute("src", "img/play.svg");
-    }, end * 1000);
+    stopTimeout = setTimeout(() => stop(), (end + 0.5) * 1000);
 }
