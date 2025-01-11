@@ -97,7 +97,7 @@ let displayingPlacePositionShadow = false;
 let resizedNote = null;
 
 const minimumWindowWidth = 2100;
-const rightClearance = 300;
+const rightClearance = 600;
 let currentWindowWidth = minimumWindowWidth;
 
 function drawVerticalLines(n) {
@@ -159,7 +159,7 @@ function calculateNotePosition() {
     }
     const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - noteWidth);
 
-    return {left: leftValue, freq: currentLine + 1};
+    return { left: leftValue, freq: currentLine + 1 };
 }
 
 function updateShadowNote() {
@@ -204,7 +204,7 @@ function startDragging(note) {
 
     draggedNote.style.display = "block";
 
-    note.remove();   
+    note.remove();
 }
 
 function startResizingLeft(note) {
