@@ -24,6 +24,8 @@ Notes are described by a sequence of tokens seperated by spaces. The tokens are 
 
 Multiple notes can be written in a single line seperated by commas (`,`), creating a chord.
 
+Notes in different lines are played one after another. Notes in the same line are played at the same time.
+
 ## Note tokens
 
 All tokens, except Pitch, are optional.
@@ -31,6 +33,8 @@ All tokens, except Pitch, are optional.
 ### Pitch
 
 Note pitch is described by letters from `A` to `G`.
+
+The default octave is 4. It can be modified with [clefs](#clefs).
 
 A note's octave can be increased by adding `+` symbols right after the letter (without a space).
 
@@ -78,12 +82,24 @@ Modifies the global length of notes, which is applied to all notes that do not h
 
 The default global note length (if none is applied manually) is 4.
 
+### Clefs
+
+Clefs are changed with keywords `treble` and `bass` in a seperate line.
+
+The default clef is treble.
+
+Treble clef sets the default octave to 4.
+
+Bass clef sets the default octave to 3.
+
+Using clefs creates two seperate sequences of notes. Notes in the treble clef do not affect the notes in bass clef. That means that if you add some notes in treble clef and switch to bass clef, following notes will be added at the beggining of the musical sequence and not after the notes in the treble clef. After switching back to treble clef the notes will be added after the notes in treble clef.
+
 ## Errors
 
 While converting, syntax errors can occur.
 
 The errors are logged in the browser's console window.
 
-Experiencing an error while converting a note skips the conversion of that note and does not include it in the output. All other succesfully converted notes in the same and other chords will still be converted and outputed.
+Experiencing an error while converting a note, a rest or a global modifier skips the conversion of that specific item and does not take it into account when creating the output. All other succesfully converted items will still be taken into account and used in the output.
 
 Be aware that line and note numbers that are outputed in the console are counted starting from 0. That means that `line 0` means the first line and `line 5` means the fourth.

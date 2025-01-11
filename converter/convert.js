@@ -5,6 +5,8 @@ const noteAmount = frequencyHz.length;
 
 const noteDist = 400;
 
+let defaultOctave = 4;
+
 function convertUnits(length) {
     return length / 300;
 }
@@ -61,7 +63,7 @@ function noteToNumber(note) {
 function parseNote(str) {
     let number = noteToNumber(str.charAt(0));
 
-    let modifier = 2;
+    let modifier = defaultOctave - 2;
 
     for (let i = 1; i < str.length; i++) {
         switch (str.charAt(i)) {
@@ -209,6 +211,8 @@ function parseTokens(lines) {
     let posTreble = 0;
     let posBass = 0;
 
+    let currentClef = Clef.TREBLE;
+
     let globalLength = 4;
 
     lines.forEach(function (line, lineIndex) {
@@ -240,6 +244,12 @@ function parseTokens(lines) {
             note.forEach(function (token, tokenIndex) {
                 // Parsing a token
                 if (error) {
+                    return;
+                }
+
+                if (token.type == StringType.INVALID) {
+                    console.log("Invalid token at line " + lineIndex + ", note " + noteIndex);
+                    error = true;
                     return;
                 }
 
@@ -286,6 +296,12 @@ function parseTokens(lines) {
                 }
 
                 if (token.type == StringType.LENGTH) {
+                    if (lineType != LineType.NONE && lineType != LineType.NOTES && lineType != LineType.REST) {
+                        console.log("Invalid length at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
                     if (lengthDefined) {
                         console.log("Multiple definitions of the length at line " + lineIndex + ", note " + noteIndex);
                         error = true;
@@ -320,9 +336,35 @@ function parseTokens(lines) {
                     return;
                 }
 
-                if (token.type == StringType.INVALID) {
-                    console.log("Invalid token at line " + lineIndex + ", note " + noteIndex);
+                if (lineType != LineType.NONE) {
+                    console.log("Invalid " + token.type + " at line " + lineIndex + ", note " + noteIndex);
                     error = true;
+                    return;
+                }
+
+                if (token.type == StringType.CLEF) {
+                    lineType = LineType.CLEF;
+
+                    const clef = classifyClef(token.str);
+
+                    if (clef == currentClef) {
+                        return;
+                    }
+
+                    currentClef = clef;
+
+                    if (classifyClef(token.str) == Clef.TREBLE) {
+                        // Switch to treble
+                        posBass = pos;
+                        pos = posTreble;
+                        defaultOctave = 4;
+                    } else {
+                        // Switch to bass
+                        posTreble = pos;
+                        pos = posBass;
+                        defaultOctave = 3;
+                    }
+
                     return;
                 }
             });
