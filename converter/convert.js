@@ -230,10 +230,10 @@ function parseTokens(lines) {
             let noteDefined = false;
             let lengthDefined = false;
 
-            let dotDefined = false;
-
             let dotMultiplier = 0.5;
             let widthMultiplier = 1;
+
+            let dotDefined = false;
 
             let length = globalLength;
             let actualLength = getActualLength(length);
@@ -328,6 +328,12 @@ function parseTokens(lines) {
                 }
 
                 if (token.type == StringType.DOT) {
+                    if (lineType != LineType.LENGTH && lineType != LineType.NOTES && lineType != LineType.REST && lineType != LineType.NONE) {
+                        console.log("Invalid dot at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
                     widthMultiplier += dotMultiplier;
                     dotMultiplier /= 2;
 
