@@ -271,6 +271,8 @@ function parseTokens(lines) {
             let accidentalShift = 0;
             let accidentalDefined = false;
 
+            let newClef = null;
+
             note.forEach(function (token, tokenIndex) {
                 // Parsing a token
                 if (error) {
@@ -413,25 +415,7 @@ function parseTokens(lines) {
                 if (token.type == StringType.CLEF) {
                     lineType = LineType.CLEF;
 
-                    const clef = classifyClef(token.str);
-
-                    if (clef == currentClef) {
-                        return;
-                    }
-
-                    currentClef = clef;
-
-                    if (classifyClef(token.str) == Clef.TREBLE) {
-                        // Switch to treble
-                        posBass = pos;
-                        pos = posTreble;
-                        defaultOctave = 4;
-                    } else {
-                        // Switch to bass
-                        posTreble = pos;
-                        pos = posBass;
-                        defaultOctave = 3;
-                    }
+                    newClef = classifyClef(token.str);
 
                     return;
                 }
@@ -482,6 +466,26 @@ function parseTokens(lines) {
                     chordWidth = actualLength;
                 } else {
                     chordWidth = Math.min(chordWidth, actualLength);
+                }
+            }
+
+            if (lineType == LineType.CLEF) {
+                if (newClef == currentClef) {
+                    return;
+                }
+
+                currentClef = newClef;
+
+                if (newClef == Clef.TREBLE) {
+                    // Switch to treble
+                    posBass = pos;
+                    pos = posTreble;
+                    defaultOctave = 4;
+                } else {
+                    // Switch to bass
+                    posTreble = pos;
+                    pos = posBass;
+                    defaultOctave = 3;
                 }
             }
 
