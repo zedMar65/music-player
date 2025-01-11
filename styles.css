@@ -104,10 +104,6 @@ body {
     right: 0;
 }
 
-.controls {
-    height: 100px;
-}
-
 .shadow-note {
     background-color: #55e3ed80;
     pointer-events: none;
@@ -115,52 +111,41 @@ body {
 
 .controls {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    gap: 16px 32px;
+    padding: 16px 0;
 }
 
-.controls-left,
-.controls-right {
-    display: flex;
-    align-items: center;
-    gap: 32px;
-}
-
-.controls-left button {
-    background-color: transparent;
-    border-radius: 0;
+.controls button,
+.controls select {
+    padding: 12px;
+    border: 2px solid #74bce3;
     outline: none;
-    margin: 0;
+    background-color: transparent;
+    font: inherit;
+}
+
+.controls .import-button {
+    margin-right: 16px;
+}
+
+.controls .play-button {
+    padding: 0;
     border: none;
 }
 
-.controls .input-range {
-    min-width: 240px;
-}
-
-.controls .input-range input {
+.instruction img,
+.input-container input,
+.input-container select {
     vertical-align: middle;
+    margin: 0 4px 0 0;
 }
 
-.controls-right button {
-    padding: 12px;
-    font: inherit;
-    background-color: transparent;
-    outline: none;
-    border: 2px solid #74bce3;
-}
-
-.instruction {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 4px;
-}
-
-.left-click {
+.instruction .left-click {
     height: 2em;
 }
 
-.shift-key {
+.instruction .shift-key {
     height: 3em;
 }

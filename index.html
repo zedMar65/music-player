@@ -2,6 +2,11 @@
 <html>
 
 <head>
+</head>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Muzikos kūrimas</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="http://unpkg.com/tone"></script>
@@ -11,63 +16,49 @@
     <header class="header">
         <h1>Muzikos kūrimas</h1>
     </header>
-
     <div class="scroll">
         <div class="display">
             <div id="current-line"></div>
-            <div class="vertical-lines">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
+            <div class="vertical-lines"></div>
             <div class="drag-note"></div>
         </div>
     </div>
     <div class="controls">
-        <div class="controls-left">
-            <button onclick="playNotes()">
-                <img src="img/play.svg" id="play" alt="Groti" />
-            </button>
-            <div class="input-range">
-                <input type="range" id="volume" name="volume" min="1" max="15" value="5"
-                    oninput="this.nextElementSibling.innerText = `Garsas (${this.value})`" />
-                <label for="volume">Garsas (5)</label>
-            </div>
-            <div class="input-range">
-                <input type="range" id="speed" name="speed" min="50" max="500" value="300"
-                    oninput="this.nextElementSibling.innerText = `Greitis (${this.value})`" />
-                <label for="speed">Greitis (300)</label>
-            </div>
-            <p class="instruction"><img src="img/left_click.png" alt="Kairysis pelės mygtukas" class="left-click">Padėti
-                naują natą</p>
-            <p class="instruction"><img src="img/shift_key.png" alt="Shift" class="shift-key">Matyti, kur bus padėta
-                nauja
-                nata</p>
+        <button onclick="play()" class="play-button">
+            <img src="img/play.svg" id="play" alt="Groti" />
+        </button>
+        <div class="input-container">
+            <select id="octave" name="octave">
+                <option value="1">2</option>
+                <option value="2">3</option>
+                <option value="3" selected>4</option>
+                <option value="4">5</option>
+                <option value="5">6</option>
+            </select>
+            <label for="octave">Oktava</label>
         </div>
-        <div class="controls-right">
-            <button onclick="importNotes()">Įkelti</button>
+        <div class="input-container">
+            <input type="range" id="volume" name="volume" min="0" max="10" value="5"
+                oninput="this.nextElementSibling.innerText = `Garsas (${this.value})`" />
+            <label for="volume">Garsas (5)</label>
+        </div>
+        <div class="input-container">
+            <input type="range" id="speed" name="speed" min="50" max="500" value="300"
+                oninput="this.nextElementSibling.innerText = `Greitis (${this.value})`" />
+            <label for="speed">Greitis (300)</label>
+        </div>
+        <div class="instruction">
+            <img src="img/left_click.png" alt="Kairysis pelės mygtukas" class="left-click">
+            <span>Padėti naują natą</span>
+        </div>
+        <div class="instruction">
+            <img src="img/shift_key.png" alt="Shift" class="shift-key">
+            <span>Matyti, kur bus padėta nauja nata</span>
+        </div>
+        <div>
+            <button onclick="importNotes()" class="import-button">Įkelti</button>
             <button onclick="exportNotes()">Atsisiųsti</button>
         </div>
-
     </div>
 
     <script src="src/display.js"></script>

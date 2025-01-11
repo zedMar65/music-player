@@ -1,13 +1,4 @@
-let notes = [
-    { start: 0, dur: 200, freq: 8 },
-    { start: 100, dur: 200, freq: 7 },
-    { start: 200, dur: 200, freq: 6 },
-    { start: 300, dur: 200, freq: 5 },
-    { start: 400, dur: 200, freq: 4 },
-    { start: 500, dur: 200, freq: 3 },
-    { start: 600, dur: 200, freq: 2 },
-    { start: 700, dur: 200, freq: 1 },
-]
+let notes = [];
 
 let mouseX = 0;
 let mouseY = 0;
@@ -18,7 +9,7 @@ const verticalLineContainer = document.querySelector(".vertical-lines");
 const draggedNote = document.querySelector(".drag-note");
 let lines = [];
 
-const lineCount = 16;
+const lineCount = 13;
 
 displayWindow.style.gridTemplateRows = `repeat(${lineCount}, 1fr)`;
 
@@ -44,6 +35,7 @@ function displayNotes(noteList) {
     noteList.forEach(note => {
         displayNote(note);
     });
+    resizeDisplay();
 }
 
 function displayNote(note) {
