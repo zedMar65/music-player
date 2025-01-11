@@ -17,18 +17,23 @@ let playTimeout;
 
 function playNotes() {
     const playIcon = document.getElementById("play");
+    const currentLine = document.getElementById("current-line");
 
     if (playIcon.getAttribute("src") == "img/stop.svg") {
         activeSynth.forEach(synth => synth.disconnect());
         playIcon.setAttribute("src", "img/play.svg");
+        currentLine.style.display = "none";
+        currentLine.style.left = 0;
         clearTimeout(playTimeout);
         return;
     }
 
     playIcon.setAttribute("src", "img/stop.svg");
+    currentLine.style.display = "block";
     let end = 0;
 
     const volume = document.getElementById("volume").value;
+    const speed = document.getElementById("speed").value;
     const notes = parseNotes(getNotes());
     const now = Tone.now();
 
@@ -42,7 +47,12 @@ function playNotes() {
         }
     });
 
+    currentLine.style.transitionDuration = end + "s";
+    currentLine.style.left = end * speed + "px";
+
     playTimeout = setTimeout(() => {
         playIcon.setAttribute("src", "img/play.svg");
+        currentLine.style.display = "none";
+        currentLine.style.left = 0;
     }, end * 1000);
 }
