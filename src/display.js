@@ -244,6 +244,8 @@ function stopDragging() {
         }
     }
 
+    resizeDisplay();
+
     draggedNote.style.display = "none";
 
     dragging = false;
