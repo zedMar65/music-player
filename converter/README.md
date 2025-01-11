@@ -56,6 +56,16 @@ If the length token is unused, the note becomes of the [global length](#length-1
 
 Length token can only be used once in a note.
 
+### Accidentals
+
+A flat is defined with a `_`.
+
+A sharp is defined with a `^`.
+
+A natural is defined with a `=`.
+
+Multiple accidentals of the same type can be used on the same note. That allows to create double flats and double sharps.
+
 ### Dot
 
 A dot is defined with a `.` or a `*` symbol.
@@ -100,6 +110,6 @@ While converting, syntax errors can occur.
 
 The errors are logged in the browser's console window.
 
-Experiencing an error while converting a note, a rest or a global modifier skips the conversion of that specific item and does not take it into account when creating the output. All other succesfully converted items will still be taken into account and used in the output.
-
 Be aware that line and note numbers that are outputed in the console are counted starting from 0. That means that `line 0` means the first line and `line 5` means the fourth.
+
+Experiencing an error while converting an item skips the conversion of that line item and does not take it into account when creating the output. All other succesfully converted lines will still be taken into account and used in the output.

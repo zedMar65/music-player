@@ -93,6 +93,12 @@ const Clef = Object.freeze({
     BASS: "bass"
 });
 
+const Accidental = Object.freeze({
+    SHARP: "sharp",
+    FLAT: "flat",
+    NATURAL: "natural"
+});
+
 const LineType = Object.freeze({
     NONE: "none",
     NOTES: "notes",
@@ -155,6 +161,20 @@ function classifyString(str) {
     return StringType.INVALID;
 }
 
+function classifyAccidental(str) {
+    if (str == '^') {
+        return Accidental.SHARP;
+    }
+
+    if (str == '_') {
+        return Accidental.FLAT;
+    }
+
+    if (str == '=') {
+        return Accidental.NATURAL;
+    }
+}
+
 function classifyClef(str) {
     if (str == 'treble') {
         return Clef.TREBLE;
@@ -215,7 +235,11 @@ function parseTokens(lines) {
 
     let globalLength = 4;
 
+    const accidentals = new Map();
+
     lines.forEach(function (line, lineIndex) {
+        let error = false;
+
         // Parsing a line
         let lineType = LineType.NONE;
 
@@ -227,6 +251,10 @@ function parseTokens(lines) {
 
         line.forEach(function (note, noteIndex) {
             // Parsing a note
+            if (error) {
+                return;
+            }
+
             let noteDefined = false;
             let lengthDefined = false;
 
@@ -239,7 +267,9 @@ function parseTokens(lines) {
             let actualLength = getActualLength(length);
             let number = 0;
 
-            let error = false;
+            let accidentalType = null;
+            let accidentalShift = 0;
+            let accidentalDefined = false;
 
             note.forEach(function (token, tokenIndex) {
                 // Parsing a token
@@ -342,6 +372,38 @@ function parseTokens(lines) {
                     return;
                 }
 
+                if (token.type == StringType.ACCIDENTAL) {
+                    if (lineType != LineType.NONE && lineType != LineType.NOTES && lineType != LineType.LENGTH) {
+                        console.log("Invalid accidental at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
+                    lineType = LineType.NOTES;
+
+                    const accidental = classifyAccidental(token.str);
+
+                    if (accidentalType != null && accidentalType != accidental) {
+                        console.log("Different accidental types at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
+                    accidentalDefined = true;
+
+                    accidentalType = accidental;
+
+                    if (accidental == Accidental.SHARP) {
+                        accidentalShift++;
+                    }
+
+                    if (accidental == Accidental.FLAT) {
+                        accidentalShift--;
+                    }
+
+                    return;
+                }
+
                 if (lineType != LineType.NONE) {
                     console.log("Invalid " + token.type + " at line " + lineIndex + ", note " + noteIndex);
                     error = true;
@@ -395,6 +457,16 @@ function parseTokens(lines) {
                     error = true;
                     return;
                 }
+
+                if (accidentalDefined) {
+                    accidentals.set(number, accidentalShift);
+                } else {
+                    if (accidentals.has(number)) {
+                        accidentalShift = accidentals.get(number);
+                    }
+                }
+
+                number += accidentalShift;
 
                 if (number < 0 || number >= noteAmount) {
                     console.log("Unsupported note pitch at position " + index + ", note " + noteIndex);

@@ -1,8 +1,7 @@
-c, d, e
-e, f, g
-2 a, 2 b
-a, b
-16
+c ^
 c
+d _
+= c
 c
-c
+d
+d ^ ^
