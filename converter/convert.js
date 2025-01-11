@@ -77,10 +77,8 @@ function parseNote(str) {
     return number;
 }
 
-function durationToWidth(dur) {
-    const power = Math.log2(dur) + 1;
-
-    return noteDist / dur;
+function getActualLength(length) {
+    return noteDist / length;
 }
 
 // Enums
@@ -93,7 +91,7 @@ const LineType = Object.freeze({
     NONE: "none",
     NOTES: "notes",
     REST: "rest",
-    DURATION: "duration",
+    LENGTH: "length",
     CLEF: "clef",
     BAR: "bar"
 });
@@ -101,7 +99,7 @@ const LineType = Object.freeze({
 const StringType = Object.freeze({
     NOTE: "note",
     REST: "rest",
-    DURATION: "duration",
+    LENGTH: "length",
     CLEF: "clef",
     TIE: "tie",
     ACCIDENTAL: "accidental",
@@ -121,7 +119,7 @@ function classifyString(str) {
     }
 
     if (/^[1-9][0-9]*$/.test(str)) {
-        return StringType.DURATION;
+        return StringType.LENGTH;
     }
 
     if (str == 'treble' || str == 'bass') {
@@ -207,7 +205,7 @@ function parseTokens(lines) {
     let posTreble = 0;
     let posBass = 0;
 
-    let globalDuration = 4;
+    let globalLength = 4;
 
     lines.forEach(function (line, lineIndex) {
         // Parsing a line
@@ -222,15 +220,15 @@ function parseTokens(lines) {
         line.forEach(function (note, noteIndex) {
             // Parsing a note
             let noteDefined = false;
-            let durationDefined = false;
+            let lengthDefined = false;
 
             let dotDefined = false;
 
             let dotMultiplier = 0.5;
             let widthMultiplier = 1;
 
-            let duration = globalDuration;
-            let width = durationToWidth(duration);
+            let length = globalLength;
+            let actualLength = getActualLength(length);
             let number = 0;
 
             let error = false;
@@ -242,7 +240,7 @@ function parseTokens(lines) {
                 }
 
                 if (token.type == StringType.NOTE) {
-                    if (lineType != LineType.NONE && lineType != LineType.DURATION && lineType != LineType.NOTES) {
+                    if (lineType != LineType.NONE && lineType != LineType.LENGTH && lineType != LineType.NOTES) {
                         console.log("Invalid note at line " + lineIndex + ", note " + noteIndex);
                         error = true;
                         return;
@@ -264,7 +262,7 @@ function parseTokens(lines) {
                 }
 
                 if (token.type == StringType.REST) {
-                    if (lineType != LineType.NONE && lineType != LineType.DURATION) {
+                    if (lineType != LineType.NONE && lineType != LineType.LENGTH) {
                         console.log("Invalid rest at line " + lineIndex + ", note " + noteIndex);
                         error = true;
                         return;
@@ -283,28 +281,28 @@ function parseTokens(lines) {
                     return;
                 }
 
-                if (token.type == StringType.DURATION) {
-                    if (durationDefined) {
+                if (token.type == StringType.LENGTH) {
+                    if (lengthDefined) {
                         console.log("Multiple definitions of the length at line " + lineIndex + ", note " + noteIndex);
                         error = true;
                         return;
                     }
 
                     if (lineType == LineType.NONE) {
-                        lineType = LineType.DURATION;
+                        lineType = LineType.LENGTH;
                     }
 
-                    duration = stringToNumber(token.str);
+                    length = stringToNumber(token.str);
 
-                    width = durationToWidth(duration);
+                    actualLength = getActualLength(length);
 
-                    if (duration <= 0 || !isPowerOfTwo(duration)) {
+                    if (length <= 0 || !isPowerOfTwo(length)) {
                         console.log("Invalid length at line " + lineIndex + ", note " + noteIndex);
                         error = true;
                         return;
                     }
 
-                    durationDefined = true;
+                    lengthDefined = true;
 
                     return;
                 }
@@ -329,7 +327,7 @@ function parseTokens(lines) {
                 return;
             }
 
-            width *= widthMultiplier;
+            actualLength *= widthMultiplier;
 
             if (dotDefined && lineType != LineType.NOTES && lineType != LineType.REST) {
                 console.log("Invalid dot at line " + lineIndex + ", note " + noteIndex);
@@ -352,20 +350,20 @@ function parseTokens(lines) {
                     return;
                 }
 
-                noteArray.push({ start: pos, freq: freq, dur: width });
+                noteArray.push({ start: pos, freq: freq, dur: actualLength });
                 if (chordWidth == null) {
-                    chordWidth = width;
+                    chordWidth = actualLength;
                 } else {
-                    chordWidth = Math.min(chordWidth, width);
+                    chordWidth = Math.min(chordWidth, actualLength);
                 }
             }
 
             if (lineType == LineType.REST) {
-                chordWidth = width;
+                chordWidth = actualLength;
             }
 
-            if (lineType == LineType.DURATION) {
-                globalDuration = duration;
+            if (lineType == LineType.LENGTH) {
+                globalLength = length;
             }
         });
 
