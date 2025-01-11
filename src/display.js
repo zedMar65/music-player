@@ -27,10 +27,7 @@ const snappingInput = document.querySelector("#snapping");
 
 function snap(value) {
     const snapping = +snappingInput.value;
-    let roundedValue = Math.round(value / snapping);
-    if (roundedValue == 0) {
-        roundedValue = 1;
-    }
+    const roundedValue = Math.round(value / snapping);
     return roundedValue * snapping;
 }
 
