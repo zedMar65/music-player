@@ -93,6 +93,8 @@ function deleteNote(event) {
     }
 
     note.remove();
+
+    resizeDisplay();
 }
 
 const minNoteWidth = 30;
