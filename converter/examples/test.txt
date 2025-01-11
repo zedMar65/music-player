@@ -3,7 +3,8 @@ c+ ^
 treble
 e
 c
-d _
+d _ // a comment, c
+// comment
 = c
 c
 d

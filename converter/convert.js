@@ -237,10 +237,10 @@ function parseTokens(lines) {
 
     const accidentals = new Map();
 
-    lines.forEach(function (line, lineIndex) {
+    lines.forEach(function (line, lineIndex) { // Parsing a line
         let error = false;
+        let comment = false;
 
-        // Parsing a line
         let lineType = LineType.NONE;
 
         let chordWidth = null;
@@ -249,9 +249,8 @@ function parseTokens(lines) {
             lineType = LineType.NOTES;
         }
 
-        line.forEach(function (note, noteIndex) {
-            // Parsing a note
-            if (error) {
+        line.forEach(function (note, noteIndex) { // Parsing a note
+            if (error || comment) {
                 return;
             }
 
@@ -273,15 +272,19 @@ function parseTokens(lines) {
 
             let newClef = null;
 
-            note.forEach(function (token, tokenIndex) {
-                // Parsing a token
-                if (error) {
+            note.forEach(function (token, tokenIndex) { // Parsing a token
+                if (error || comment) {
                     return;
                 }
 
                 if (token.type == StringType.INVALID) {
                     console.log("Invalid token at line " + lineIndex + ", note " + noteIndex);
                     error = true;
+                    return;
+                }
+
+                if (token.type == StringType.COMMENT) {
+                    comment = true;
                     return;
                 }
 

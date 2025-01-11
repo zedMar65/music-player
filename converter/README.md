@@ -110,6 +110,14 @@ A bar is defined with `|`.
 
 A bar cancels all [accidentals](#accidentals).
 
+## Comments
+
+A comment can be created with `//` seperated by spaces from both sides.
+
+Everything after the `//` in the same line is ignored and covertion is continued from the next line.
+
+Comments are used to leave notes for people, they have no impact to the conversion process.
+
 ## Errors
 
 While converting, syntax errors can occur.
