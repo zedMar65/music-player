@@ -1,9 +1,13 @@
 const inputBox = document.querySelector("textarea");
 const outputBox = document.querySelector(".output p");
 
+const noteAmount = frequencyHz.length;
+
 const noteDist = 400;
 
-const numberOfLines = 16;
+function convertUnits(length) {
+    return length / 300;
+}
 
 function isPowerOfTwo(number) {
     // Check if number is positive and non-zero and if there's only one bit on
@@ -38,17 +42,17 @@ function noteToNumber(note) {
         case 'c':
             return 0;
         case 'd':
-            return 1;
-        case 'e':
             return 2;
-        case 'f':
-            return 3;
-        case 'g':
+        case 'e':
             return 4;
-        case 'a':
+        case 'f':
             return 5;
+        case 'g':
+            return 7;
+        case 'a':
+            return 9;
         case 'b':
-            return 6;
+            return 11;
         default:
             return -1;
     }
@@ -57,7 +61,7 @@ function noteToNumber(note) {
 function parseNote(str) {
     let number = noteToNumber(str.charAt(0));
 
-    let modifier = 0;
+    let modifier = 2;
 
     for (let i = 1; i < str.length; i++) {
         switch (str.charAt(i)) {
@@ -72,7 +76,7 @@ function parseNote(str) {
         }
     }
 
-    number += (modifier*7);
+    number += (modifier*12);
 
     return number;
 }
@@ -336,21 +340,24 @@ function parseTokens(lines) {
             }
 
             if (lineType == LineType.NOTES) {
+                // Add the note to the array
+
                 if (noteDefined == false) {
                     console.log("No note defined at line " + lineIndex + ", note " + noteIndex);
                     error = true;
                     return;
                 }
 
-                const freq = numberOfLines - number;
-
-                if (freq <= 0 || freq > numberOfLines) {
-                    console.log("Wrong note pitch at position " + index + ", note " + noteIndex);
+                if (number < 0 || number >= noteAmount) {
+                    console.log("Unsupported note pitch at position " + index + ", note " + noteIndex);
                     error = true;
                     return;
                 }
 
-                noteArray.push({ start: pos, freq: freq, dur: actualLength });
+                const frequency = frequencyHz[number];
+
+                noteArray.push({ start: convertUnits(pos), dur: convertUnits(actualLength), freq: frequency });
+
                 if (chordWidth == null) {
                     chordWidth = actualLength;
                 } else {
