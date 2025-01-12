@@ -48,9 +48,9 @@ Pitch token can only be used once in a note.
 
 Modifies the length of the note.
 
-Length is written as a number that is a power of two.
+Length is written as an integer or a decimal or a simple fraction. `4`, `7`, `2.5`, `.5`, `8/3` are all valid length values.
 
-Length of 1 signifies a whole note, a length of 4 - a quarter note and so on.
+Length value describes the duration of a note compared to a whole note. The note's duration is `1/length` of a whole note. For example, length of 1 signifies a whole note, a length of 4 - a quarter note and so on.
 
 If the length token is unused, the note becomes of the [global length](#length-1).
 

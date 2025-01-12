@@ -11,11 +11,6 @@ function convertUnits(length) {
     return length / 300;
 }
 
-function isPowerOfTwo(number) {
-    // Check if number is positive and non-zero and if there's only one bit on
-    return number > 0 && (number & (number - 1)) === 0;
-}
-
 function isCharANumber(c) {
     return (c >= '0' && c <= 9);
 }
@@ -24,19 +19,29 @@ function charToNumber(c) {
     return (c - '0');
 }
 
-function stringToNumber(str) {
-    let number = 0;
+function parseNumber(str) {
+    const type = classifyNumber(str);
 
-    for (let i = 0; i < str.length; i++) {
-        if (!isCharANumber(str.charAt(i))) {
+    if (type == NumberType.DECIMAL) {
+        return parseFloat(str);
+    }
+
+    if (type == NumberType.FRACTION) {
+        const parts = str.split('/');
+
+        if (parts.length != 2) {
             return -1;
         }
 
-        number *= 10;
-        number += charToNumber(str.charAt(i));
-    }
+        const num = parseInt(parts[0]);
+        const den = parseInt(parts[1]);
 
-    return number;
+        if (num == -1 || den == -1 || den == 0) {
+            return -1;
+        }
+
+        return num / den;
+    }
 }
 
 function noteToNumber(note) {
@@ -88,6 +93,11 @@ function getActualLength(length) {
 }
 
 // Enums
+const NumberType = Object.freeze({
+    FRACTION: "fraction",
+    DECIMAL: "decimal"
+});
+
 const Clef = Object.freeze({
     TREBLE: "treble",
     BASS: "bass"
@@ -131,7 +141,7 @@ function classifyString(str) {
         return StringType.REST;
     }
 
-    if (/^[1-9][0-9]*$/.test(str)) {
+    if (/^\d*\.?\d*$/.test(str) || /^\d+\/\d+$/.test(str)) {
         return StringType.LENGTH;
     }
 
@@ -164,6 +174,16 @@ function classifyString(str) {
     }
 
     return StringType.INVALID;
+}
+
+function classifyNumber(str) {
+    if (/^\d*\.?\d*$/.test(str)) {
+        return NumberType.DECIMAL;
+    }
+
+    if (/^\d+\/\d+$/.test(str)) {
+        return NumberType.FRACTION;
+    }
 }
 
 function classifyAccidental(str) {
@@ -357,11 +377,11 @@ function parseTokens(lines) {
                         lineType = LineType.LENGTH;
                     }
 
-                    length = stringToNumber(token.str);
+                    length = parseNumber(token.str);
 
                     actualLength = getActualLength(length);
 
-                    if (length <= 0 || !isPowerOfTwo(length)) {
+                    if (length <= 0) {
                         console.log("Invalid length at line " + lineIndex + ", note " + noteIndex);
                         error = true;
                         return;
