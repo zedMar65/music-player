@@ -559,6 +559,12 @@ function parseTokens(lines) {
 
             if (lineType == LineType.BAR) {
                 accidentals.clear();
+                
+                const newPos = Math.max(pos, posTreble, posBass);
+
+                pos = newPos;
+                posTreble = newPos;
+                posBass = newPos;
             }
 
             if (lineType == LineType.REST) {

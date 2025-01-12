@@ -116,13 +116,17 @@ Treble clef sets the default octave to 4.
 
 Bass clef sets the default octave to 3.
 
-Using clefs creates two seperate sequences of notes. Notes in the treble clef do not affect the notes in bass clef. That means that if you add some notes in treble clef and switch to bass clef, following notes will be added at the beggining of the musical sequence and not after the notes in the treble clef. After switching back to treble clef the notes will be added after the notes in treble clef.
+Clefs use two different pointers to add notes. That means that notes in treble clef are added after notes only in treble clef, ignoring notes in bass clef and vice versa.
+
+Clef pointers are synchronized by using a [bar](#bars) - the pointer that is further behind is set to the position of the pointer that is ahead. That means that all notes in treble and bass clefs in the same measure should be written before a bar.
 
 ### Bars
 
 A bar is defined with `|`.
 
 A bar cancels all [accidentals](#accidentals).
+
+A bar synchronizes [clef pointers](#clefs).
 
 ## Comments
 
