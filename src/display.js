@@ -37,8 +37,8 @@ function displayLines() {
 
 function displayAllLines() {
     clearLines();
-    displayWindow.style.gridTemplateRows = `repeat(${lineCount * octaveCount}, 1fr)`;
-    for (let i = 0; i < lineCount * octaveCount; i++) {
+    displayWindow.style.gridTemplateRows = `repeat(${linesPerOctave * octaveCount}, 1fr)`;
+    for (let i = 0; i < linesPerOctave * octaveCount; i++) {
         let line = document.createElement("div");
         line.classList.add("line");
         displayWindow.appendChild(line);
