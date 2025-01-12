@@ -626,7 +626,7 @@ function parseTokens(lines) {
         console.log("Unterminated ties");
     }
 
-    const output = JSON.stringify({ notes: noteArray, volume: 5, speed: 300 });
+    const output = JSON.stringify({ notes: noteArray, speed: 260 });
 
     outputBox.innerHTML = output;
 
