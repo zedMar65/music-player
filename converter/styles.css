@@ -1,0 +1,26 @@
+.main-window {
+    display: flex;
+    margin: 0 32px 0 32px;
+    width: auto;
+    gap: 32px;
+}
+
+textarea {
+    width: 50%;
+    height: 100%;
+    resize: none;
+}
+
+#input {
+    position: relative;
+    height: 100%;
+}
+
+#output {
+    border: 1px solid #bbb;
+    height: 100%;
+}
+
+.output > button {
+    width: 100px;
+}

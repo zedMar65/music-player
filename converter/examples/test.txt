@@ -1,0 +1,22 @@
+bass
+c+ ^
+treble
+e
+c
+d _ // a comment, c
+// comment
+= c
+c
+d
+bass
+d+ ^ ^
+treble
+d
+|
+d
+bass
+d+
+treble
+d t
+d
+d

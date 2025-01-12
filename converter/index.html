@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Muzikos kūrimas</title>
+    <link rel="stylesheet" type="text/css" href="../styles.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <h1><a href="https://github.com/Rokas-159/music-player" target="_blank">Muzikos kūrimas</a> - Vertėjas</h1>
+        <a href="../index.html">Grįžti į natų dėliotuvą</a>
+    </header>
+
+    <div class="main-window">
+        <textarea id="input"></textarea>
+        <textarea id="output" readonly></textarea>
+    </div>
+    <div class="controls">
+        <button class="convert-button" onclick="parseText()">Konvertuoti</button>
+        <button class="copy-button" onclick="copyOutput()">Kopijuoti</button>
+        <a href="https://github.com/Rokas-159/music-player/blob/main/converter/README.md" target="_blank">Naudojimosi instrukcija</a>
+    </div>
+
+    <script src="../src/frequencyValues.js"></script>
+    <script src="convert.js"></script>
+</body>
+
+</html>

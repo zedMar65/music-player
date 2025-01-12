@@ -17,6 +17,12 @@ body {
     margin: 0;
 }
 
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .header a {
     text-decoration: none;
     color: inherit;
@@ -93,6 +99,7 @@ body {
 
 .note {
     background-color: #55e3ed;
+    box-shadow: 0 0 8px 2px inset #74bce3;
     z-index: 1;
     cursor: move;
 }
