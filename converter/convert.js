@@ -5,10 +5,12 @@ const noteAmount = frequencyHz.length;
 
 const noteDist = 400;
 
+const speed = 260;
+
 let defaultOctave = 4;
 
 function convertUnits(length) {
-    return length / 300;
+    return length / speed;
 }
 
 function isCharANumber(c) {
@@ -626,7 +628,7 @@ function parseTokens(lines) {
         console.log("Unterminated ties");
     }
 
-    const output = JSON.stringify({ notes: noteArray, speed: 260 });
+    const output = JSON.stringify({ notes: noteArray, speed: speed });
 
     outputBox.innerHTML = output;
 
