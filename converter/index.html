@@ -9,18 +9,17 @@
 
 <body>
     <header class="header">
-        <h1>Muzikos kūrimas</h1>
+        <h1>Muzikos kūrimas - Vertėjas</h1>
+        <a href="../">Grįžti į natų dėliotuvą</a>
     </header>
 
     <div class="main-window">
-        <textarea></textarea>
-        <div class="output">
-            <p></p>
-            <button class="copy-button" onclick="copyOutput()">Kopijuoti</button>
-        </div>
+        <textarea id="input"></textarea>
+        <textarea id="output" readonly></textarea>
     </div>
     <div class="controls">
         <button class="convert-button" onclick="parseText()">Konvertuoti</button>
+        <button class="copy-button" onclick="copyOutput()">Kopijuoti</button>
     </div>
 
     <script src="../src/frequencyValues.js"></script>

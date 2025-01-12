@@ -1,5 +1,5 @@
-const inputBox = document.querySelector("textarea");
-const outputBox = document.querySelector(".output p");
+const inputBox = document.querySelector("#input");
+const outputBox = document.querySelector("#output");
 
 const noteAmount = frequencyHz.length;
 
