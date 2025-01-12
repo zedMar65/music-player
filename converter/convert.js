@@ -499,12 +499,9 @@ function parseTokens(lines) {
                     tiedLength += tie.length;
                 }
 
-                if (accidentalDefined) {
-                    accidentals.set(number, accidentalShift);
-                } else {
-                    if (accidentals.has(number)) {
-                        accidentalShift = accidentals.get(number);
-                    }
+                
+                if (!accidentalDefined && accidentals.has(number)) {
+                    accidentalShift = accidentals.get(number);
                 }
 
                 let accidentedNumber = number + accidentalShift;
@@ -513,6 +510,10 @@ function parseTokens(lines) {
                     console.log("Unsupported note pitch at position " + index + ", note " + noteIndex);
                     error = true;
                     return;
+                }
+
+                if (accidentalDefined) {
+                    accidentals.set(number, accidentalShift);
                 }
 
                 if (chordWidth == null) {
