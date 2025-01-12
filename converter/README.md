@@ -74,6 +74,12 @@ Increases the note length by half of its original (set by length [token](#length
 
 Multiple dots can be used on the same note. A second dot additionally increases the length by 1/4 of the original value. A third - by 1/8 and so on.
 
+### Staccato
+
+Staccato is defined with a `s`.
+
+It can be used multiple times in a note allowing to create staccatissimo or shortening the note even more.
+
 ### Tie
 
 A tie is created with a `t`.

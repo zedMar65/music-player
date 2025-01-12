@@ -116,6 +116,7 @@ const StringType = Object.freeze({
     TIE: "tie",
     ACCIDENTAL: "accidental",
     DOT: "dot",
+    STACCATO: "staccato",
     BAR: "bar",
     COMMENT: "comment",
     INVALID: "invalid"
@@ -148,6 +149,10 @@ function classifyString(str) {
 
     if (str == '.' || str == '*') {
         return StringType.DOT;
+    }
+
+    if (str == 's') {
+        return StringType.STACCATO;
     }
 
     if (str == '|') {
@@ -274,6 +279,8 @@ function parseTokens(lines) {
             let newClef = null;
 
             let tieDefined = false;
+
+            let staccatoMultiplier = 1;
 
             note.forEach(function (token, tokenIndex) { // Parsing a token
                 if (error || comment) {
@@ -432,6 +439,20 @@ function parseTokens(lines) {
                     return;
                 }
 
+                if (token.type == StringType.STACCATO) {
+                    if (lineType != LineType.NONE && lineType != LineType.NOTES && lineType != LineType.LENGTH) {
+                        console.log("Invalid staccato at line " + lineIndex + ", note " + noteIndex);
+                        error = true;
+                        return;
+                    }
+
+                    lineType = LineType.NOTES;
+
+                    staccatoMultiplier /= 2;
+
+                    return;
+                }
+
                 if (lineType != LineType.NONE) {
                     console.log("Invalid " + token.type + " at line " + lineIndex + ", note " + noteIndex);
                     error = true;
@@ -475,7 +496,7 @@ function parseTokens(lines) {
                 }
 
                 let tiedPos = pos;
-                let tiedLength = actualLength;
+                let tiedLength = actualLength * staccatoMultiplier;
 
                 if (ties.has(number)) {
                     const tie = ties.get(number);
