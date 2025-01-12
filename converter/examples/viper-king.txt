@@ -1,0 +1,382 @@
+// Dream Theater - Viper King. Keyboard section from 02:46 to 03:15
+
+treble
+2
+g _ t, b t
+16
+g, b
+a
+b
+d+
+
+|
+b
+d+
+e+
+f+
+e+
+d+
+
+b
+a
+d+
+f
+e
+b
+
+|
+a
+e
+d
+a
+d
+g _
+
+r
+
+e
+d
+
+r 8
+
+d
+
+bass
+
+r 4 *
+
+b
+
+r 8
+
+b
+a
+
+r
+
+|
+treble
+
+r 8
+
+_ d
+e
+a
+_ d+
+
+e
+a
+d+
+e+
+a+
+e+
+
+bass
+e
+a
+r 2
+r 8
+|
+
+treble
+2
+b+, g+ _, d+
+r 4
+4
+a+ *, g+ _ *, d+ *
+
+16
+a+ s s, g+ s s, d+ s s
+a+ s s, g+ s s, d+ s s
+a+ s s, g+ s s, d+ s s
+a+ s s, g+ s s, d+ s s
+a+ s s, g+ s s, d+ s s
+a+ s s, g+ s s, d+ s s
+
+|
+2
+a+, g+ _, d+
+r 4
+|
+
+16
+d+
+d+ _
+b
+a
+g _
+b 
+
+a
+g
+e
+d
+d _
+r
+
+bass
+r 2
+r 8 *
+a
+
+|
+treble
+r
+e
+d _
+a
+e
+g _
+
+d =
+b
+d _
+a
+e
+d+ _
+
+bass
+a
+r 2
+r 8 *
+
+|
+treble
+d
+b 
+g _
+d+
+e
+a
+
+b 
+d+ _
+d+ =
+e+
+g+ _
+a+
+
+|
+64/3
+b+
+a+
+g+ _
+e+
+d+
+d+ _
+c+
+a
+16
+e
+d
+d _
+r 8 *
+bass
+r 2
+r
+a
+g _
+e
+
+|
+treble
+4
+a *, d *
+b *, e *
+bass
+a *
+b *
+|
+treble
+16
+a 4 *, e
+d
+g _
+e
+d
+
+r
+
+a+ 4 *, e+
+d+
+g+ _
+e+
+d+
+b
+bass
+r 4
+r
+b 
+r 4 *
+|
+treble
+8
+d+, a, g _
+r 16
+e+, b, a _
+r 16
+d+, a =, g
+r 16
+a+ _, e+, b
+16
+g+ _ t, d+ t, b t
+|
+8
+g+ *, d+ *, b *
+16
+g _
+b 
+g _
+
+e+ *, a
+g
+e
+e+
+b 
+e
+|
+d+
+d+ _
+e+
+d+ =
+d+ _
+b 
+
+d
+d _
+e
+d =
+d _
+bass
+r 2
+r 8 *
+b
+
+|
+treble
+b 8
+a
+g _ 8
+d
+r 8
+b 
+a
+g
+e
+bass
+r 4 *
+b 8
+r 4
+
+|
+treble
+e 8
+d
+r 8
+b
+a 8
+g _
+r 8
+b t 
+bass
+r 8 *
+b 8
+r 4
+b 8
+r
+
+|
+treble
+b 8
+a
+g _
+e
+d
+r 8
+f
+e
+d
+b-
+bass
+r 4 *
+b 8
+r 4
+
+|
+treble
+d 8
+d 4
+e 8
+e 4
+bass
+a 8
+a 4
+b 8
+b 4
+
+|
+treble
+b 8
+a
+g _ 8
+d
+r 8
+b 
+a
+g
+e
+bass
+r 4 *
+b 8
+r 4
+
+|
+treble
+e 8
+d
+r 8
+b 
+a 8
+g _
+r 8
+b t
+bass
+r 8 *
+b 8
+r 4
+b 8
+r
+
+|
+treble
+b 8
+a
+g _
+e
+d
+r 8
+f
+e
+d
+b-
+bass
+r 4 *
+b 8
+r 4
+
+|
+treble
+r 4 *
+c 8
+c 4
+bass
+8
+a, e
+4
+a, e
+
+g 8
+g 4
+
+16
+|
