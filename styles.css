@@ -31,7 +31,7 @@ body {
     height: 100%;
     position: relative;
     display: grid;
-    grid-template-rows: repeat(14, 1fr);
+    grid-template-rows: repeat(12, 1fr);
     background-color: #f5f5f5;
     overflow: hidden;
     border-right: 1px solid #74bce3;
@@ -55,6 +55,7 @@ body {
     border-left: 1px solid #74bce3;
     height: 100%;
     width: 0px;
+    pointer-events: none;
 }
 
 #current-line {
@@ -119,12 +120,17 @@ body {
 }
 
 .controls button,
-.controls select {
+.controls select,
+#snapping {
     padding: 12px;
     border: 2px solid #74bce3;
     outline: none;
     background-color: transparent;
     font: inherit;
+}
+
+#snapping {
+    width: 50px;
 }
 
 .controls .import-button {
@@ -143,7 +149,8 @@ body {
     margin: 0 4px 0 0;
 }
 
-.instruction .left-click {
+.instruction .left-click,
+.instruction .right-click {
     height: 2em;
 }
 

@@ -7,21 +7,72 @@ const verticalLineContainer = document.querySelector(".vertical-lines");
 const draggedNote = document.querySelector(".drag-note");
 let lines = [];
 
-const lineCount = 12;
+const linesPerOctave = 12;
+const octaveCount = 5;
+
+let lineCount = linesPerOctave;
 
 displayWindow.style.gridTemplateRows = `repeat(${lineCount}, 1fr)`;
 
-for (let i = 0; i < lineCount; i++) {
-    let line = document.createElement("div");
-    line.classList.add("line");
-    displayWindow.appendChild(line);
-    lines.push(line);
+function clearLines() {
+    displayWindow.querySelectorAll(".line").forEach(line => {
+        if (line.parentElement === displayWindow) {
+            line.remove();
+        }
+    });
+    lines = [];
 }
+
+function displayLines() {
+    clearLines();
+    displayWindow.style.gridTemplateRows = `repeat(${linesPerOctave}, 1fr)`;
+    for (let i = 0; i < linesPerOctave; i++) {
+        let line = document.createElement("div");
+        line.classList.add("line");
+        displayWindow.appendChild(line);
+        lines.push(line);
+    }
+    lineCount = linesPerOctave;
+}
+
+function displayAllLines() {
+    clearLines();
+    displayWindow.style.gridTemplateRows = `repeat(${linesPerOctave * octaveCount}, 1fr)`;
+    for (let i = 0; i < linesPerOctave * octaveCount; i++) {
+        let line = document.createElement("div");
+        line.classList.add("line");
+        displayWindow.appendChild(line);
+        lines.push(line);
+    }
+    lineCount = linesPerOctave * octaveCount;
+}
+
+displayLines();
 
 let shadowNote = document.createElement("div");
 shadowNote.classList.add("note-position");
 shadowNote.classList.add("shadow-note");
 shadowNote.style.display = "none";
+
+const snappingInput = document.querySelector("#snapping");
+
+function snap(value) {
+    const snapping = +snappingInput.value;
+    const roundedValue = Math.round(value / snapping);
+    return roundedValue * snapping;
+}
+
+function snapUp(value) {
+    const snapping = +snappingInput.value;
+    const roundedValue = Math.ceil(value / snapping);
+    return roundedValue * snapping;
+}
+
+function snapDown(value) {
+    const snapping = +snappingInput.value;
+    const roundedValue = Math.floor(value / snapping);
+    return roundedValue * snapping;
+}
 
 function clearNotes() {
     document.querySelectorAll(".note").forEach(note => {
@@ -36,8 +87,14 @@ function displayNote(note) {
     noteElement.classList.add("note-position");
     noteElement.style.left = `${note.start}px`;
     noteElement.style.width = `${note.dur}px`;
-    noteElement.setAttribute("data-freq", note.freq);
-    noteElement.setAttribute("data-octave", +octaveInput.value);
+
+    if (+octaveInput.value == 0) {
+        noteElement.setAttribute("data-freq", (note.freq - 1) % linesPerOctave + 1);
+        noteElement.setAttribute("data-octave", 6-Math.floor((note.freq-1) / linesPerOctave));
+    } else {
+        noteElement.setAttribute("data-freq", note.freq);
+        noteElement.setAttribute("data-octave", +octaveInput.value);
+    }
 
     let resizeLeft = document.createElement("div");
     resizeLeft.classList.add("resize-left");
@@ -47,9 +104,29 @@ function displayNote(note) {
     resizeRight.classList.add("resize-right");
     noteElement.appendChild(resizeRight);
 
-    noteElement.addEventListener("mousedown", mouseDown);
+    noteElement.addEventListener("mousedown", mouseDownOnNote);
+    noteElement.addEventListener("contextmenu", deleteNote);
 
     lines[note.freq - 1].appendChild(noteElement);
+
+    resizeDisplay();
+}
+
+function deleteNote(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let note = event.target;
+
+    if (note.classList.contains("resize-left") || note.classList.contains("resize-right")) {
+        note = note.parentElement;
+    }
+
+    if (!note.classList.contains("note")) {
+        return;
+    }
+
+    note.remove();
 
     resizeDisplay();
 }
@@ -141,7 +218,7 @@ function calculateNotePosition() {
     if (currentLine < 0 || currentLine >= lineCount || mouseX < displayX || mouseX > displayX + windowWidth) {
         return false;
     }
-    const leftValue = Math.min(Math.max(0, mouseX + offsetX), windowWidth - noteWidth);
+    const leftValue = Math.min(Math.max(0, snap(mouseX + offsetX)), snapDown(windowWidth - noteWidth));
 
     return { left: leftValue, freq: currentLine + 1 };
 }
@@ -236,6 +313,8 @@ function stopDragging() {
         }
     }
 
+    resizeDisplay();
+
     draggedNote.style.display = "none";
 
     dragging = false;
@@ -260,7 +339,7 @@ function dragNote() {
 function resizeLeft() {
     const maxNoteWidth = rightAnchor;
 
-    const width = Math.max(minNoteWidth, Math.min(maxNoteWidth, rightAnchor - mouseX - resizeLeftOffset));
+    const width = Math.max(snapUp(minNoteWidth), Math.min(snapDown(maxNoteWidth), snap(rightAnchor - mouseX - resizeLeftOffset)));
 
     resizedNote.style.width = `${width}px`;
     resizedNote.style.left = `${rightAnchor - width}px`;
@@ -272,7 +351,7 @@ function resizeRight() {
 
     const maxNoteWidth = displayEndX - resizedNote.getBoundingClientRect().left;
 
-    const width = Math.max(minNoteWidth, Math.min(maxNoteWidth, mouseX + resizeRightOffset));
+    const width = Math.max(snapUp(minNoteWidth), Math.min(snapDown(maxNoteWidth), snap(mouseX + resizeRightOffset)));
 
     resizedNote.style.width = `${width}px`;
 }
@@ -295,7 +374,11 @@ function callMoveFunctions() {
     }
 }
 
-function mouseDown(event) {
+function mouseDownOnNote(event) {
+    if (event.button !== 0) {
+        return;
+    }
+
     event.preventDefault();
 
     const target = event.target;
@@ -311,6 +394,12 @@ function mouseDown(event) {
     if (target.classList.contains("resize-right")) {
         startResizingRight(target.parentElement);
     }
+}
+
+let lastMouseDownTarget = null;
+
+function mouseDown(event) {
+    lastMouseDownTarget = event.target;
 }
 
 function mouseUp(event) {
@@ -333,7 +422,7 @@ function onMouseMove(event) {
 function onClick(event) {
     event.preventDefault();
 
-    if (event.target.classList.contains("line") && event.target.parentElement.classList.contains("display")) {
+    if (lastMouseDownTarget == event.target && event.target.classList.contains("line") && event.target.parentElement.classList.contains("display")) {
         rawOffsetX = 0;
 
         recalculateOffsets();
@@ -368,6 +457,7 @@ function onKeyRelease(event) {
     }
 }
 
+window.addEventListener("mousedown", mouseDown);
 window.addEventListener("mouseup", mouseUp);
 window.addEventListener("mousemove", onMouseMove);
 displayWindow.addEventListener("click", onClick);
