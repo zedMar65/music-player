@@ -31,16 +31,16 @@
         <div class="input-container">
             <select id="octave" name="octave">
                 <option value="0">Visos</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4" selected>4</option>
-                <option value="5">5</option>
                 <option value="6">6</option>
+                <option value="5">5</option>
+                <option value="4" selected>4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
             </select>
             <label for="octave">Oktava</label>
         </div>
         <div class="input-container">
-            <input type="range" id="volume" name="volume" min="0" max="10" value="5"
+            <input type="range" id="volume" name="volume" min="1" max="10" value="5"
                 oninput="this.nextElementSibling.innerText = `Garsas (${this.value})`" />
             <label for="volume">Garsas (5)</label>
         </div>
@@ -50,7 +50,7 @@
             <label for="speed">Greitis (300)</label>
         </div>
         <div class="input-container">
-            <input type="number" id="snapping" name="snapping" min="1" value="100"/>
+            <input type="number" id="snapping" name="snapping" min="1" value="100" />
             <label for="snapping">Fiksavimas</label>
         </div>
         <div class="instruction">

@@ -23,6 +23,15 @@ header {
     align-items: center;
 }
 
+.header a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header a:hover {
+    opacity: 0.5;
+}
+
 .header,
 .controls,
 .scroll {
