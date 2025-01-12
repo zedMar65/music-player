@@ -10,7 +10,7 @@ function getDisplayedNotes() {
         const dur = note.clientWidth / +speedInput.value;
         const start = (note.getBoundingClientRect().left - displayWindowX) / +speedInput.value;
         const octave = +note.attributes.getNamedItem("data-octave").value;
-        const freq = getFreq(lineCount + 1 - +note.attributes.getNamedItem("data-freq").value, octave);
+        const freq = getFreq(linesPerOctave + 1 - +note.attributes.getNamedItem("data-freq").value, octave);
         notes.push({ dur, start, freq });
     });
 
@@ -31,6 +31,26 @@ function displayOctave() {
     clearNotes();
     hiddenNotes = [];
 
+    if (octaveInput.value == 0) {
+        displayAllLines();
+
+        notes.forEach(note => {
+            const freq = lineCount - frequencyHz.indexOf(note.freq);
+
+            if (freq > 0 && freq <= lineCount) {
+                const start = note.start * +speedInput.value;
+                const dur = note.dur * +speedInput.value;
+                displayNote({ freq, start, dur });
+            } else {
+                hiddenNotes.push(note);
+            }
+        });
+
+        return;
+    }
+    
+    displayLines();
+    
     notes.forEach(note => {
         const freq = lineCount - (frequencyHz.indexOf(note.freq) - 12 * (+octaveInput.value - 2));
         if (freq > 0 && freq <= lineCount) {

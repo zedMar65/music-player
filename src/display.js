@@ -7,16 +7,47 @@ const verticalLineContainer = document.querySelector(".vertical-lines");
 const draggedNote = document.querySelector(".drag-note");
 let lines = [];
 
-const lineCount = 12;
+const linesPerOctave = 12;
+const octaveCount = 5;
+
+let lineCount = linesPerOctave;
 
 displayWindow.style.gridTemplateRows = `repeat(${lineCount}, 1fr)`;
 
-for (let i = 0; i < lineCount; i++) {
-    let line = document.createElement("div");
-    line.classList.add("line");
-    displayWindow.appendChild(line);
-    lines.push(line);
+function clearLines() {
+    displayWindow.querySelectorAll(".line").forEach(line => {
+        if (line.parentElement === displayWindow) {
+            line.remove();
+        }
+    });
+    lines = [];
 }
+
+function displayLines() {
+    clearLines();
+    displayWindow.style.gridTemplateRows = `repeat(${linesPerOctave}, 1fr)`;
+    for (let i = 0; i < linesPerOctave; i++) {
+        let line = document.createElement("div");
+        line.classList.add("line");
+        displayWindow.appendChild(line);
+        lines.push(line);
+    }
+    lineCount = linesPerOctave;
+}
+
+function displayAllLines() {
+    clearLines();
+    displayWindow.style.gridTemplateRows = `repeat(${linesPerOctave * octaveCount}, 1fr)`;
+    for (let i = 0; i < linesPerOctave * octaveCount; i++) {
+        let line = document.createElement("div");
+        line.classList.add("line");
+        displayWindow.appendChild(line);
+        lines.push(line);
+    }
+    lineCount = linesPerOctave * octaveCount;
+}
+
+displayLines();
 
 let shadowNote = document.createElement("div");
 shadowNote.classList.add("note-position");
@@ -56,8 +87,14 @@ function displayNote(note) {
     noteElement.classList.add("note-position");
     noteElement.style.left = `${note.start}px`;
     noteElement.style.width = `${note.dur}px`;
-    noteElement.setAttribute("data-freq", note.freq);
-    noteElement.setAttribute("data-octave", +octaveInput.value);
+
+    if (+octaveInput.value == 0) {
+        noteElement.setAttribute("data-freq", (note.freq - 1) % linesPerOctave + 1);
+        noteElement.setAttribute("data-octave", 6-Math.floor((note.freq-1) / linesPerOctave));
+    } else {
+        noteElement.setAttribute("data-freq", note.freq);
+        noteElement.setAttribute("data-octave", +octaveInput.value);
+    }
 
     let resizeLeft = document.createElement("div");
     resizeLeft.classList.add("resize-left");
