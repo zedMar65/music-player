@@ -49,7 +49,7 @@ function updateSideInfoHeight() {
     const noteNameHeight = noteNameContainer.clientHeight / lineCount;
     const noteNameWidth = noteNameContainer.clientWidth;
 
-    const fontSize = Math.floor(Math.min(noteNameHeight * 0.55, noteNameWidth * 0.5));
+    const fontSize = Math.floor(Math.min(noteNameHeight * 0.9, noteNameWidth * 0.5));
 
     noteNameContainer.style.fontSize = `${fontSize}px`;
 

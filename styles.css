@@ -60,15 +60,20 @@ main {
     border-bottom: 1px solid black;
 }
 
-.octave-name {
-    width: 32px;
-    height: calc(100% - 1px);
-    border: 1px solid black;
-    border-bottom: none;
-    border-right: none;
+.octave-name,
+.note-name {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: calc(100% - 1px);
+    border: 1px solid black;
+    border-bottom: none;
+    overflow: hidden;
+}
+
+.octave-name {
+    width: 32px;
+    border-right: none;
 }
 
 .note-name.white {
@@ -83,12 +88,6 @@ main {
 
 .note-name {
     width: 64px;
-    height: calc(100% - 1px);
-    border: 1px solid black;
-    border-bottom: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .scroll {
