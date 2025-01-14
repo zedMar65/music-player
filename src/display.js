@@ -23,31 +23,71 @@ function clearLines() {
     lines = [];
 }
 
-function displayLines() {
+function displayLines(all) {
+    const n = all ? linesPerOctave * octaveCount : linesPerOctave;
+
     clearLines();
-    displayWindow.style.gridTemplateRows = `repeat(${linesPerOctave}, 1fr)`;
-    for (let i = 0; i < linesPerOctave; i++) {
+    displayWindow.style.gridTemplateRows = `repeat(${n}, 1fr)`;
+    for (let i = 0; i < n; i++) {
         let line = document.createElement("div");
         line.classList.add("line");
         displayWindow.appendChild(line);
         lines.push(line);
     }
-    lineCount = linesPerOctave;
+    lineCount = n;
+    displayNoteNames(all);
 }
 
-function displayAllLines() {
-    clearLines();
-    displayWindow.style.gridTemplateRows = `repeat(${linesPerOctave * octaveCount}, 1fr)`;
-    for (let i = 0; i < linesPerOctave * octaveCount; i++) {
-        let line = document.createElement("div");
-        line.classList.add("line");
-        displayWindow.appendChild(line);
-        lines.push(line);
+const noteNames = [{"name":"C","natural":true},{"name":"C#","natural":false},{"name":"D","natural":true},{"name":"D#","natural":false},{"name":"E","natural":true},{"name":"F","natural":true},{"name":"F#","natural":false},{"name":"G","natural":true},{"name":"G#","natural":false},{"name":"A","natural":true},{"name":"A#","natural":false},{"name":"B","natural":true}];
+
+const noteNameContainer = document.querySelector(".note-names");
+const octaveNameContainer = document.querySelector(".octave-names");
+
+function updateSideInfoHeight() {
+    noteNameContainer.style.height = `${displayWindow.clientHeight-1}px`;
+
+    const noteNameHeight = noteNameContainer.clientHeight / lineCount;
+    const noteNameWidth = noteNameContainer.clientWidth;
+
+    const fontSize = Math.floor(Math.min(noteNameHeight * 0.55, noteNameWidth * 0.5));
+
+    noteNameContainer.style.fontSize = `${fontSize}px`;
+
+    octaveNameContainer.style.height = `${displayWindow.clientHeight-1}px`;
+}
+
+window.addEventListener("resize", updateSideInfoHeight);
+
+function displayNoteNames(all) {
+    noteNameContainer.innerHTML = "";
+    octaveNameContainer.innerHTML = "";
+
+    const n = all ? octaveCount : 1;
+
+    noteNameContainer.style.gridTemplateRows = `repeat(${n * linesPerOctave}, 1fr)`;
+
+    for (let i = 0; i < n; i++) {
+        let octaveName = document.createElement("div");
+        octaveName.classList.add("octave-name");
+
+        const octave = +octaveInput.value == 0 ? octaveCount + 1 - i : +octaveInput.value;
+        octaveName.innerText = octave;
+
+        octaveNameContainer.appendChild(octaveName);
+
+        for (let j = 0; j < linesPerOctave; j++) {
+            let noteName = document.createElement("div");
+            noteName.classList.add("note-name");
+    
+            const note = noteNames[linesPerOctave - j - 1];
+            noteName.innerText = note.name;
+            noteName.classList.add(note.natural ? "white" : "black");
+            noteNameContainer.appendChild(noteName);
+        }
     }
-    lineCount = linesPerOctave * octaveCount;
-}
 
-displayLines();
+    updateSideInfoHeight();
+}
 
 let shadowNote = document.createElement("div");
 shadowNote.classList.add("note-position");
@@ -157,7 +197,7 @@ let displayingPlacePositionShadow = false;
 
 let resizedNote = null;
 
-const minimumWindowWidth = 2100;
+const minimumWindowWidth = 2500;
 const rightClearance = 600;
 let currentWindowWidth = minimumWindowWidth;
 
@@ -464,4 +504,7 @@ displayWindow.addEventListener("click", onClick);
 document.addEventListener("keydown", onKeyPress);
 document.addEventListener("keyup", onKeyRelease);
 
-resizeDisplay();
+window.addEventListener("load", () => {
+    resizeDisplay();
+    displayLines(+octaveInput.value == 0);
+});
