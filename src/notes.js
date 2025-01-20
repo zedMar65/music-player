@@ -32,7 +32,7 @@ function displayOctave() {
     hiddenNotes = [];
 
     if (octaveInput.value == 0) {
-        displayAllLines();
+        displayLines(true);
 
         notes.forEach(note => {
             const freq = lineCount - frequencyHz.indexOf(note.freq);
@@ -49,7 +49,7 @@ function displayOctave() {
         return;
     }
     
-    displayLines();
+    displayLines(false);
     
     notes.forEach(note => {
         const freq = lineCount - (frequencyHz.indexOf(note.freq) - 12 * (+octaveInput.value - 2));

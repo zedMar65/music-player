@@ -34,19 +34,69 @@ header {
 
 .header,
 .controls,
-.scroll {
+main {
     margin: 0 32px;
 }
 
+main {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.octave-names {
+    position: relative;
+    display: grid;
+}
+
+.note-names,
+.display {
+    position: relative;
+    display: grid;
+    grid-template-rows: repeat(12, 1fr);
+}
+
+.note-names, .octave-names {
+    border-bottom: 1px solid black;
+}
+
+.octave-name,
+.note-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 1px);
+    border: 1px solid black;
+    border-bottom: none;
+    overflow: hidden;
+}
+
+.octave-name {
+    width: 32px;
+    border-right: none;
+}
+
+.note-name.white {
+    background-color: white;
+    color: black;
+}
+
+.note-name.black {
+    background-color: black;
+    color: white;
+}
+
+.note-name {
+    width: 64px;
+}
+
 .scroll {
-    overflow-x: auto;
+    overflow-x: scroll;
+    margin: 0;
 }
 
 .display {
     height: 100%;
-    position: relative;
-    display: grid;
-    grid-template-rows: repeat(12, 1fr);
     background-color: #f5f5f5;
     overflow: hidden;
     border-right: 1px solid #74bce3;

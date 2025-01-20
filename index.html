@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!--<meta name="viewport" content="width=device-width,initial-scale=1">-->
     <title>Muzikos kūrimas</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="src/Tone.js"></script>
@@ -17,13 +17,19 @@
         <h1><a href="https://github.com/Rokas-159/music-player" target="_blank">Muzikos kūrimas<a></h1>
         <a href="converter/index.html">Muzikos vertėjas</a>
     </header>
-    <div class="scroll">
-        <div class="display">
-            <div id="current-line"></div>
-            <div class="vertical-lines"></div>
-            <div class="drag-note"></div>
+    <main>
+        <div class="octave-names">
+            <div class="octave-name">4</div>
         </div>
-    </div>
+        <div class="note-names"></div>
+        <div class="scroll">
+            <div class="display">
+                <div id="current-line"></div>
+                <div class="vertical-lines"></div>
+                <div class="drag-note"></div>
+            </div>
+        </div>
+    </main>
     <div class="controls">
         <button onclick="play()" class="play-button">
             <img src="img/play.svg" id="play" alt="Groti" />
@@ -71,9 +77,9 @@
         </div>
     </div>
 
-    <script src="src/display.js"></script>
     <script src="src/frequencyValues.js"></script>
     <script src="src/player.js"></script>
+    <script src="src/display.js"></script>
     <script src="src/notes.js"></script>
 </body>
 
