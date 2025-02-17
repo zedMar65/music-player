@@ -1,20 +1,20 @@
 ﻿# Music Player
 
-This is a project made by two high school students as their music class project.
+This project was created by two high school students as their music class project.
 
-The program allows you to simply create music by creating note blocks and dragging them around in different semitone positions.
+The program allows you to create music by creating note blocks and dragging them around in different semitone positions.
 
-It also includes a music converter that allows to easily generate data for the player from musical letter notation and more. 
+It also includes a music converter that easily generates data for the player from musical letter notation and more.
 
 ## Usage
 
-1) Download the project (and unzip if needed)
-2) Open index.html with your favourite browser
-3) Enjoy
+1. Download the project (and unzip if needed).
+2. Open `index.html` with your favorite browser.
+3. Enjoy.
 
 ## Examples
 
-All examples are in [examples folder](examples/). In order to try it, you haveto copy data from the files and import them in the player.
+All examples are in the [examples folder](examples/). To try them, copy data from the files and import them into the player.
 
 ## License
 
